@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MANGALORE MOVIES</title>
+
+  <!-- ================= WEBSITE FAVICON & LOGO ================= -->
+  <link rel="icon" type="image/png" href="https://i.ibb.co/xtdHs2Zb/1000147633-1.png">
+  <link rel="shortcut icon" type="image/png" href="https://i.ibb.co/xtdHs2Zb/1000147633-1.png">
+  <link rel="apple-touch-icon" href="https://i.ibb.co/xtdHs2Zb/1000147633-1.png">
+
+  <!-- Default Open Graph Tags (Edge function replaces these if ?v=ID is in the link) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="MANGALORE MOVIES">
+  <meta id="metaOgTitle" property="og:title" content="MANGALORE MOVIES">
+  <meta id="metaOgDesc" property="og:description" content="Watch latest trailers and download movies in multiple languages.">
+  <meta id="metaOgImage" property="og:image" content="https://i.ibb.co/xtdHs2Zb/1000147633-1.png">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta id="metaTwTitle" name="twitter:title" content="MANGALORE MOVIES">
+  <meta id="metaTwDesc" name="twitter:description" content="Watch latest trailers and download movies in multiple languages.">
+  <meta id="metaTwImage" name="twitter:image" content="https://i.ibb.co/xtdHs2Zb/1000147633-1.png">
+
+  <meta name="theme-color" content="#07090f">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -webkit-touch-callout: none !important; }
+    input, textarea { -webkit-user-select: auto !important; -moz-user-select: auto !important; -ms-user-select: auto !important; user-select: auto !important; -webkit-touch-callout: default !important; }
+    img { -webkit-user-drag: none; user-drag: none; -webkit-touch-callout: none !important; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .smooth-slider-track { display: flex; width: 100%; height: 100%; will-change: transform; transition: transform 0.55s cubic-bezier(0.25, 1, 0.5, 1); transform: translate3d(0, 0, 0); backface-visibility: hidden; perspective: 1000px; }
+    @keyframes pulse-subtle { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+    .animate-telegram { animation: pulse-subtle 2.5s infinite ease-in-out; }
+    .poster-glow:hover { box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.3), 0 8px 10px -6px rgba(220, 38, 38, 0.2); }
+    .cinema-glass { background: linear-gradient(135deg, rgba(20, 24, 38, 0.85), rgba(11, 14, 24, 0.95)); backdrop-filter: blur(12px); }
+    @keyframes introPop { 0% { transform: scale(0.7); opacity: 0; filter: blur(8px); } 50% { transform: scale(1.05); opacity: 1; filter: blur(0px); } 100% { transform: scale(1); opacity: 1; filter: blur(0px); } }
+    @keyframes neonGlow { 0%, 100% { box-shadow: 0 0 25px rgba(220, 38, 38, 0.4), inset 0 0 15px rgba(220, 38, 38, 0.2); } 50% { box-shadow: 0 0 45px rgba(220, 38, 38, 0.8), inset 0 0 25px rgba(220, 38, 38, 0.4); } }
+    .intro-logo-anim { animation: introPop 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards, neonGlow 2s infinite ease-in-out; }
+    .see-all-card { background: radial-gradient(circle at top, rgba(220, 38, 38, 0.25) 0%, rgba(18, 22, 36, 0.9) 70%); }
+  </style>
+</head>
+<body class="bg-[#07090f] text-gray-100 min-h-screen antialiased selection:bg-transparent selection:text-white pb-20 sm:pb-24" oncontextmenu="return false;">
+
+  <!-- ================= CINEMATIC INTRO ================= -->
+  <div id="introSplash" class="fixed inset-0 z-[9999] bg-[#06080e] flex flex-col items-center justify-center transition-opacity duration-500 pointer-events-auto">
+    <div class="flex flex-col items-center space-y-4 text-center px-4">
+      <img src="https://i.ibb.co/xtdHs2Zb/1000147633-1.png" alt="Logo" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover ring-4 ring-red-600 intro-logo-anim" draggable="false"/>
+      <div class="space-y-1">
+        <h1 class="text-2xl sm:text-4xl font-black tracking-widest text-white uppercase">MANGALORE <span class="text-red-600">MOVIES</span></h1>
+        <p class="text-xs sm:text-sm text-gray-400 font-medium tracking-wider uppercase">The Ultimate Movie Hub</p>
+      </div>
+      <div class="w-28 h-1 bg-gray-800 rounded-full overflow-hidden mt-3">
+        <div class="w-full h-full bg-red-600 animate-pulse"></div>
+      </div>
+    </div>
+  </div>
+  <script>setTimeout(function(){var s=document.getElementById('introSplash');if(s){s.style.transition='opacity 0.5s ease';s.style.opacity='0';s.style.pointerEvents='none';setTimeout(function(){if(s&&s.parentNode)s.parentNode.removeChild(s);},550);}},1200);</script>
+
+  <!-- ================= SEARCH MODAL ================= -->
+  <div id="searchModal" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex flex-col items-center p-4 sm:p-6 transition-opacity duration-300">
+    <div class="w-full max-w-2xl bg-[#0f1422] border border-gray-800 rounded-3xl p-4 sm:p-6 shadow-2xl space-y-4 my-auto">
+      <div class="flex items-center justify-between gap-3 border-b border-gray-800/80 pb-3">
+        <div class="flex items-center gap-2 flex-1">
+          <svg class="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" id="modalSearchInput" placeholder="Search movie name, language, year..." class="w-full bg-transparent text-sm sm:text-base text-white focus:outline-none placeholder-gray-500 font-medium">
+        </div>
+        <button onclick="closeSearchModal()" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-red-600 text-gray-300 hover:text-white flex items-center justify-center transition cursor-pointer text-xs font-bold">✕</button>
+      </div>
+      <div id="modalSearchResults" class="max-h-80 overflow-y-auto space-y-2 pr-1 no-scrollbar">
+        <p class="text-xs text-gray-500 text-center py-6">Type above to search movies...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= LANGUAGES MODAL ================= -->
+  <div id="languagesModal" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 transition-opacity duration-300">
+    <div class="w-full max-w-lg bg-[#0f1422] border border-gray-800 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+        <div class="flex items-center gap-2"><span class="text-xl">🌐</span><h3 class="text-base sm:text-lg font-black text-white uppercase tracking-wider">Select Movie Language</h3></div>
+        <button onclick="closeLanguagesModal()" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-red-600 text-gray-300 hover:text-white flex items-center justify-center transition cursor-pointer text-xs font-bold">✕</button>
+      </div>
+      <div id="modalLanguagesGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-96 overflow-y-auto pr-1 no-scrollbar"></div>
+    </div>
+  </div>
+
+  <!-- ================= NOTIFICATIONS MODAL ================= -->
+  <div id="notificationsModal" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 transition-opacity duration-300">
+    <div class="w-full max-w-lg bg-[#0f1422] border border-gray-800 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-gray-800 pb-3 flex-shrink-0">
+        <div class="flex items-center gap-2"><span class="text-xl">🔔</span><h3 class="text-base sm:text-lg font-black text-white uppercase tracking-wider">Notifications</h3><span class="text-[10px] bg-red-600/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded-full font-bold">Past 7 Days</span></div>
+        <button onclick="closeNotificationsModal()" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-red-600 text-gray-300 hover:text-white flex items-center justify-center transition cursor-pointer text-xs font-bold">✕</button>
+      </div>
+      <div id="notificationsList" class="overflow-y-auto space-y-3 pr-1 flex-1 no-scrollbar">
+        <p class="text-xs text-gray-500 text-center py-10">No notifications in the past 7 days.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TOP NAVBAR ================= -->
+  <header class="border-b border-gray-800/80 bg-[#0d101a]/95 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center gap-3">
+      <button onclick="showHomeView()" class="flex items-center gap-2.5 group focus:outline-none cursor-pointer">
+        <img src="https://i.ibb.co/xtdHs2Zb/1000147633-1.png" alt="Logo" class="w-10 h-10 rounded-full object-cover ring-2 ring-red-600 shadow-lg group-hover:ring-red-500 transition duration-300" draggable="false"/>
+        <span class="text-lg sm:text-2xl font-black tracking-wider text-white uppercase group-hover:text-red-500 transition duration-200">MANGALORE <span class="text-red-600">MOVIES</span></span>
+      </button>
+      <a id="telegramHeaderBtn" href="https://t.me/" target="_blank" class="animate-telegram flex items-center gap-2 bg-[#229ED9] hover:bg-[#1d8cc2] text-white text-xs sm:text-sm font-bold px-4 py-2 rounded-full shadow-lg shadow-[#229ED9]/30 border border-white/20 transition duration-300">
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        <span class="hidden xs:inline">Join</span> Telegram
+      </a>
+    </div>
+  </header>
+
+  <!-- ================= VIEW 1: HOME ================= -->
+  <section id="homeView" class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
+    <div id="heroSliderWrapper" class="hidden w-full">
+      <div id="heroSliderContainer" class="relative w-full aspect-[16/9] sm:aspect-[21/9] md:aspect-[24/9] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-[#101422] group">
+        <div id="sliderTrack" class="smooth-slider-track"></div>
+        <button id="sliderPrevBtn" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-red-600 text-white flex items-center justify-center backdrop-blur-md border border-white/20 shadow-xl transition opacity-0 group-hover:opacity-100 z-20 cursor-pointer"><svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg></button>
+        <button id="sliderNextBtn" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-red-600 text-white flex items-center justify-center backdrop-blur-md border border-white/20 shadow-xl transition opacity-0 group-hover:opacity-100 z-20 cursor-pointer"><svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg></button>
+        <div id="sliderDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20"></div>
+      </div>
+    </div>
+    <div id="languagesSection" class="relative pt-1"><div id="languagesMenu" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1"></div></div>
+    <div id="moviesGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
+      <p class="text-gray-500 text-center col-span-full py-16" id="loadingText">Loading Mangalore Movies...</p>
+    </div>
+  </section>
+
+  <!-- ================= VIEW 2: MOVIE DETAILS ================= -->
+  <section id="detailView" class="hidden max-w-5xl mx-auto px-4 py-6 sm:py-8">
+    <div class="flex justify-between items-center mb-6">
+      <button onclick="showHomeView()" class="bg-[#121624] hover:bg-gray-800 text-gray-200 border border-gray-800 hover:border-red-500 px-5 py-2.5 rounded-full text-xs font-bold transition flex items-center gap-2 shadow-lg cursor-pointer"><span>⬅</span> Back to Home</button>
+      <button id="shareBtn" onclick="shareMovieLink()" class="bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white border border-red-500/40 px-4 py-2.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 shadow-md cursor-pointer">
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+        <span>Share</span>
+      </button>
+    </div>
+
+    <div class="cinema-glass border border-white/10 rounded-3xl p-5 sm:p-8 shadow-2xl space-y-6 sm:space-y-8">
+      <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-2xl ring-1 ring-white/10">
+        <iframe id="detailTrailerFrame" class="w-full h-full" src="" title="Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <button id="detailUnmuteBtn" class="absolute top-3 sm:top-4 right-3 sm:right-4 bg-black/80 hover:bg-red-600 text-white text-[11px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-md border border-white/20 transition duration-300 flex items-center gap-2 shadow-2xl cursor-pointer"><span>🔊 Unmute / Tap for Sound</span></button>
+      </div>
+
+      <div class="space-y-4 border-b border-gray-800/80 pb-6">
+        <div class="flex flex-wrap items-center gap-2.5">
+          <div id="detailGenre" class="inline-flex items-center text-xs sm:text-sm font-extrabold text-red-400 bg-red-950/40 border border-red-500/30 px-3.5 py-1.5 rounded-full shadow-inner tracking-wide">• Languages •</div>
+          <span id="detailYear" class="bg-black/50 border border-white/10 text-gray-300 px-2.5 py-1 rounded-full text-xs font-mono">2026</span>
+        </div>
+        <h1 id="detailTitle" class="text-2xl sm:text-4xl font-black text-white tracking-wide">Movie Title</h1>
+        <div><h3 class="text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Storyline</h3><p id="detailDesc" class="text-gray-400 text-sm sm:text-base leading-relaxed">Description...</p></div>
+      </div>
+
+      <div class="bg-gradient-to-b from-[#0c0f1c] to-[#070912] p-5 sm:p-6 rounded-3xl border border-white/10 space-y-4 shadow-xl">
+        <div class="flex items-center justify-between border-b border-gray-800/80 pb-3">
+          <span class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2"><svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download Links</span>
+          <span class="text-xs text-gray-400">Fast Direct Links</span>
+        </div>
+        <div id="detailDownloadsList" class="space-y-3.5 pt-1"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STICKY BOTTOM MENU ================= -->
+  <nav class="fixed bottom-0 inset-x-0 z-40 bg-[#0d101a]/95 backdrop-blur-lg border-t border-gray-800/90 py-2 px-6">
+    <div class="max-w-md mx-auto flex justify-between items-center text-xs">
+      <button onclick="showHomeView()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500 transition cursor-pointer group focus:outline-none"><svg class="w-5 h-5 text-gray-400 group-hover:text-red-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span class="text-[10px] font-bold">Home</span></button>
+      <button onclick="openSearchModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500 transition cursor-pointer group focus:outline-none"><svg class="w-5 h-5 text-gray-400 group-hover:text-red-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><span class="text-[10px] font-bold">Search</span></button>
+      <button onclick="openLanguagesModal()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500 transition cursor-pointer group focus:outline-none"><svg class="w-5 h-5 text-gray-400 group-hover:text-red-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg><span class="text-[10px] font-bold">Languages</span></button>
+      <button onclick="openNotificationsModal()" class="relative flex flex-col items-center gap-1 text-gray-400 hover:text-yellow-400 transition cursor-pointer group focus:outline-none"><span id="notifBadge" class="hidden absolute -top-1 -right-1.5 bg-red-600 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center animate-pulse shadow-md">0</span><svg class="w-5 h-5 text-gray-400 group-hover:text-yellow-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg><span class="text-[10px] font-bold">Alerts</span></button>
+    </div>
+  </nav>
+
+  <!-- ================= FIREBASE & APP JS ================= -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, doc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAk2OEQZWD_GqkJmbw0ZFrt5gzfMYva0k0",
+      authDomain: "lottery-e3270.firebaseapp.com",
+      projectId: "lottery-e3270",
+      storageBucket: "lottery-e3270.firebasestorage.app",
+      messagingSenderId: "1087946611259",
+      appId: "1:1087946611259:web:4d381de88415e8c0d3da1e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let allMovies = [];
+    let currentActiveMovie = null;
+    let allNotifications = [];
+    let isShowingAll = false;
+    let selectedLanguage = "All";
+    let swRegistration = null;
+    let knownNotifIds = new Set();
+    let initialLoadDone = false;
+    let currentSlide = 0;
+    let sliderTimer = null;
+    let heroMoviesList = [];
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async () => {
+        try { swRegistration = await navigator.serviceWorker.register('./sw.js'); } catch (e) {}
+      });
+    }
+
+    async function requestDeviceNotificationPermission() {
+      if (!("Notification" in window)) return;
+      if (Notification.permission === "default") {
+        try { await Notification.requestPermission(); } catch (e) {}
+      }
+    }
+    setTimeout(requestDeviceNotificationPermission, 2500);
+
+    function createMovieSlug(m) {
+      const cleanTitle = (m.title || "movie").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+      return `${cleanTitle}-${m.id}`;
+    }
+
+    function extractRequestedDocId() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryId = urlParams.get('v') || urlParams.get('m') || urlParams.get('id');
+      if (queryId) return queryId.includes("-") ? queryId.split("-").pop().trim() : queryId.trim();
+
+      const hash = window.location.hash.replace(/^#/, "").trim();
+      if (hash) {
+        const clean = decodeURIComponent(hash);
+        return clean.includes("-") ? clean.split("-").pop().trim() : clean.trim();
+      }
+      return null;
+    }
+
+    const directId = extractRequestedDocId();
+    if (directId) {
+      document.getElementById("homeView").classList.add("hidden");
+      document.getElementById("detailView").classList.remove("hidden");
+      document.getElementById("detailTitle").innerText = "Loading Movie...";
+      
+      getDoc(doc(db, "movies", directId)).then((snap) => {
+        if (snap.exists()) {
+          const m = { id: snap.id, ...snap.data() };
+          currentActiveMovie = m;
+          renderMovieDetail(m);
+          window.history.replaceState({ view: 'detail', id: m.id }, '', `?v=${m.id}#${createMovieSlug(m)}`);
+        } else { showHomeView(); }
+      }).catch(e => { showHomeView(); });
+    }
+
+    onSnapshot(doc(db, "settings", "general"), (snap) => {
+      if (snap.exists() && snap.data().telegramLink) { document.getElementById("telegramHeaderBtn").href = snap.data().telegramLink; }
+    });
+
+    onSnapshot(collection(db, "notifications"), (snapshot) => {
+      const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+      allNotifications = [];
+
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        const createdMs = data.createdAt?.toMillis ? data.createdAt.toMillis() : Date.now();
+        const docId = docSnap.id;
+
+        if (createdMs >= oneWeekAgo) {
+          allNotifications.push({ id: docId, ...data, createdMs });
+          if (initialLoadDone && !knownNotifIds.has(docId)) { triggerSystemNotification(data); }
+        }
+        knownNotifIds.add(docId);
+      });
+
+      allNotifications.sort((a, b) => b.createdMs - a.createdMs);
+      initialLoadDone = true;
+      updateNotificationBadge();
+      renderNotificationsList();
+    });
+
+    async function triggerSystemNotification(data) {
+      if (!("Notification" in window) || Notification.permission !== "granted") return;
+      const title = data.title || "MANGALORE MOVIES";
+      const options = {
+        body: data.message || "New movie available to watch & download!",
+        icon: "https://i.ibb.co/xtdHs2Zb/1000147633-1.png",
+        badge: "https://i.ibb.co/xtdHs2Zb/1000147633-1.png",
+        image: data.photoUrl || undefined,
+        vibrate: [200, 100, 200, 100, 200],
+        tag: data.id || "movie-notification",
+        renotify: true,
+        data: { url: data.link ? (data.link.startsWith("http") ? data.link : `${window.location.origin}/${data.link}`) : window.location.href }
+      };
+
+      if (swRegistration && swRegistration.showNotification) { swRegistration.showNotification(title, options); }
+      else { new Notification(title, options); }
+    }
+
+    function updateNotificationBadge() {
+      const badge = document.getElementById("notifBadge");
+      const lastRead = parseInt(localStorage.getItem("lastReadNotifTime") || "0");
+      const unreadCount = allNotifications.filter(n => n.createdMs > lastRead).length;
+      if (unreadCount > 0) { badge.innerText = unreadCount > 9 ? "9+" : unreadCount; badge.classList.remove("hidden"); }
+      else { badge.classList.add("hidden"); }
+    }
+
+    function renderNotificationsList() {
+      const container = document.getElementById("notificationsList");
+      if (!container) return;
+      if (allNotifications.length === 0) { container.innerHTML = `<p class="text-xs text-gray-500 text-center py-10">No notifications in the past 7 days.</p>`; return; }
+
+      container.innerHTML = allNotifications.map(n => `
+        <div class="bg-[#14192b] border border-gray-800 p-3.5 rounded-2xl space-y-2.5 shadow-md">
+          ${n.photoUrl ? `<img src="${n.photoUrl}" class="w-full h-32 object-cover rounded-xl border border-white/10" />` : ''}
+          <div class="space-y-1">
+            <div class="flex justify-between items-start gap-2">
+              <h4 class="text-sm font-black text-white">${n.title || 'Movie Alert'}</h4>
+              <span class="text-[9px] text-gray-400 flex-shrink-0">${formatTimeAgo(n.createdMs)}</span>
+            </div>
+            <p class="text-xs text-gray-300 leading-relaxed">${n.message || ''}</p>
+          </div>
+          ${n.link ? `<button onclick="handleNotificationClick('${n.link}')" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-xs py-2 rounded-xl transition flex items-center justify-center gap-1 cursor-pointer"><span>${n.btnText || 'Watch / Open Now'}</span><span>▶</span></button>` : ''}
+        </div>
+      `).join("");
+    }
+
+    function formatTimeAgo(timestamp) {
+      const seconds = Math.floor((Date.now() - timestamp) / 1000);
+      if (seconds < 60) return "Just now";
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes}m ago`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours}h ago`;
+      const days = Math.floor(hours / 24);
+      return `${days}d ago`;
+    }
+
+    window.openNotificationsModal = function() { document.getElementById("notificationsModal").classList.remove("hidden"); localStorage.setItem("lastReadNotifTime", Date.now().toString()); updateNotificationBadge(); };
+    window.closeNotificationsModal = function() { document.getElementById("notificationsModal").classList.add("hidden"); };
+    window.handleNotificationClick = function(link) { closeNotificationsModal(); if (link.startsWith("#")) { window.location.hash = link.replace("#", ""); } else if (link.startsWith("http")) { window.open(link, "_blank"); } };
+
+    onSnapshot(query(collection(db, "movies"), orderBy("createdAt", "desc")), (snapshot) => {
+      const loadingText = document.getElementById("loadingText");
+      if (loadingText) loadingText.remove();
+      allMovies = [];
+      snapshot.forEach(docSnap => { allMovies.push({ id: docSnap.id, ...docSnap.data() }); });
+      if (allMovies.length === 0) { const grid = document.getElementById("moviesGrid"); if (grid) grid.innerHTML = `<p class="text-gray-500 text-center col-span-full py-16">No movies published yet.</p>`; return; }
+      try { initHeroSlider(allMovies); updateLanguagesMenu(allMovies); updateModalLanguages(allMovies); applyFilters(); } catch (e) {}
+      handleRoute();
+    });
+
+    function initHeroSlider(movies) {
+      const wrapper = document.getElementById("heroSliderWrapper");
+      const container = document.getElementById("heroSliderContainer");
+      const track = document.getElementById("sliderTrack");
+      const dots = document.getElementById("sliderDots");
+      if (!wrapper || !container || !track || !dots) return;
+      heroMoviesList = movies.slice(0, 5);
+      if (heroMoviesList.length === 0) { wrapper.classList.add("hidden"); return; }
+      wrapper.classList.remove("hidden"); track.innerHTML = ""; dots.innerHTML = "";
+
+      heroMoviesList.forEach((m, idx) => {
+        const ytThumbnail = `https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg`;
+        const slide = document.createElement("div");
+        slide.className = "w-full h-full flex-shrink-0 relative cursor-pointer group/slide";
+        slide.innerHTML = `
+          <img src="${ytThumbnail}" alt="${m.title}" draggable="false" class="w-full h-full object-cover group-hover/slide:scale-105 transition duration-700 ease-out pointer-events-none" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${m.youtubeId}/mqdefault.jpg'" />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#07090f] via-[#07090f]/50 to-transparent pointer-events-none"></div>
+          <div class="absolute inset-0 bg-gradient-to-r from-[#07090f]/80 via-transparent to-transparent pointer-events-none"></div>
+          <div class="absolute top-3 inset-x-3 sm:top-5 sm:inset-x-6 flex justify-between items-center z-10 pointer-events-none"><span class="bg-red-600/90 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow">🔥 FEATURED #0${idx + 1}</span>${m.year ? `<span class="bg-black/70 backdrop-blur-md border border-white/15 text-yellow-400 text-[10px] font-bold px-2 py-0.5 rounded-md shadow">⭐ ${m.year}</span>` : ''}</div>
+          <div class="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3 z-10 pointer-events-none"><div class="space-y-1 sm:space-y-1.5 max-w-xl"><h2 class="text-base sm:text-2xl md:text-3xl font-black text-white drop-shadow-md tracking-wide line-clamp-1">${m.title}</h2><p class="text-[10px] sm:text-xs text-gray-300 line-clamp-1 sm:line-clamp-2 max-w-md">${m.description || 'Watch official trailer and download.'}</p></div><button class="self-start sm:self-auto bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs sm:text-sm px-4 sm:px-5 py-2 rounded-full shadow-lg border border-red-400/40 transition duration-200 transform hover:scale-105 flex items-center gap-1.5 cursor-pointer"><span>Watch Trailer</span><span>▶</span></button></div>
+        `;
+        slide.addEventListener("click", () => { window.location.hash = createMovieSlug(m); });
+        track.appendChild(slide);
+        const dot = document.createElement("button");
+        dot.className = `w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full transition-all duration-300 cursor-pointer ${idx === 0 ? 'bg-red-600 w-6 sm:w-7' : 'bg-white/40 hover:bg-white'}`;
+        dot.addEventListener("click", (e) => { e.stopPropagation(); goToSlide(idx); });
+        dots.appendChild(dot);
+      });
+      goToSlide(0); startAutoSlider();
+      container.addEventListener("mouseenter", stopAutoSlider);
+      container.addEventListener("mouseleave", startAutoSlider);
+    }
+
+    function goToSlide(idx) {
+      if (heroMoviesList.length === 0) return;
+      currentSlide = (idx + heroMoviesList.length) % heroMoviesList.length;
+      const track = document.getElementById("sliderTrack");
+      if (track) track.style.transform = `translate3d(-${currentSlide * 100}%, 0, 0)`;
+      const dotsContainer = document.getElementById("sliderDots");
+      if (dotsContainer && dotsContainer.children.length > 0) {
+        Array.from(dotsContainer.children).forEach((dot, dIdx) => { dot.className = dIdx === currentSlide ? "w-6 sm:w-7 h-2 sm:h-2.5 rounded-full bg-red-600 transition-all duration-300" : "w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-white/40 hover:bg-white transition-all duration-300"; });
+      }
+    }
+    function nextSlide() { goToSlide(currentSlide + 1); }
+    function prevSlide() { goToSlide(currentSlide - 1); }
+    function startAutoSlider() { stopAutoSlider(); sliderTimer = setInterval(nextSlide, 3500); }
+    function stopAutoSlider() { if (sliderTimer) clearInterval(sliderTimer); }
+
+    document.getElementById("sliderNextBtn").addEventListener("click", (e) => { e.stopPropagation(); nextSlide(); startAutoSlider(); });
+    document.getElementById("sliderPrevBtn").addEventListener("click", (e) => { e.stopPropagation(); prevSlide(); startAutoSlider(); });
+
+    window.openSearchModal = function() { const modal = document.getElementById("searchModal"); const input = document.getElementById("modalSearchInput"); modal.classList.remove("hidden"); input.value = ""; input.focus(); renderModalSearchResults(""); };
+    window.closeSearchModal = function() { document.getElementById("searchModal").classList.add("hidden"); };
+    document.getElementById("modalSearchInput").addEventListener("input", (e) => { renderModalSearchResults(e.target.value); });
+
+    function renderModalSearchResults(searchTerm) {
+      const resultsContainer = document.getElementById("modalSearchResults");
+      const term = (searchTerm || "").toLowerCase().trim();
+      if (!term) { resultsContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">Type above to search movies...</p>`; return; }
+      const matches = allMovies.filter(m => (m.title || "").toLowerCase().includes(term) || (m.languages || m.genre || "").toLowerCase().includes(term));
+      if (matches.length === 0) { resultsContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">No movies found matching "${term}".</p>`; return; }
+      resultsContainer.innerHTML = matches.map(m => `<div onclick="selectMovieFromSearch('${m.id}')" class="flex items-center gap-3 p-2.5 bg-[#14192b] hover:bg-gray-800 rounded-xl border border-gray-800 hover:border-red-500/50 cursor-pointer transition"><img src="${m.posterUrl || `https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg`}" class="w-12 h-14 object-cover rounded-lg flex-shrink-0" /><div class="flex-1 min-w-0"><h4 class="text-sm font-bold text-white truncate">${m.title}</h4><p class="text-[11px] text-gray-400 truncate">${m.languages || m.genre || 'Multi'} • ${m.year || ''}</p></div><span class="text-xs text-red-400 font-bold px-2 py-1 bg-red-950/60 rounded">View ▶</span></div>`).join("");
+    }
+    window.selectMovieFromSearch = function(movieId) { closeSearchModal(); const target = allMovies.find(m => m.id === movieId); if (target) openMoviePage(target); };
+
+    window.openLanguagesModal = function() { document.getElementById("languagesModal").classList.remove("hidden"); };
+    window.closeLanguagesModal = function() { document.getElementById("languagesModal").classList.add("hidden"); };
+
+    function updateModalLanguages(moviesList) {
+      const container = document.getElementById("modalLanguagesGrid");
+      if (!container) return;
+      const uniqueLangs = new Set();
+      moviesList.forEach(m => { (m.languages || m.genre || "").split(",").map(s => s.trim()).filter(Boolean).forEach(l => uniqueLangs.add(l)); });
+      const langList = ["All", ...Array.from(uniqueLangs)];
+      container.innerHTML = langList.map(lang => {
+        const count = lang === "All" ? moviesList.length : moviesList.filter(m => (m.languages || m.genre || "").toLowerCase().includes(lang.toLowerCase())).length;
+        const isSelected = selectedLanguage.toLowerCase() === lang.toLowerCase();
+        return `<button onclick="selectLanguageFromModal('${lang}')" class="flex flex-col items-center justify-center p-4 rounded-2xl border transition duration-200 cursor-pointer text-center group ${isSelected ? 'bg-gradient-to-br from-red-600 to-red-800 text-white border-red-500 shadow-xl' : 'bg-[#14192b] hover:bg-[#1a2138] text-gray-200 border-gray-800'}"><span class="text-base sm:text-lg font-black uppercase group-hover:scale-105 transition">${lang === 'All' ? '🔥 All Movies' : lang}</span><span class="text-[10px] mt-1 ${isSelected ? 'text-red-200' : 'text-gray-400'} font-medium">${count} Movies</span></button>`;
+      }).join("");
+    }
+    window.selectLanguageFromModal = function(lang) { closeLanguagesModal(); showHomeView(); setLanguageFilter(lang); };
+
+    function updateLanguagesMenu(moviesList) {
+      const menu = document.getElementById("languagesMenu");
+      if (!menu) return;
+      const uniqueLangs = new Set();
+      moviesList.forEach(m => { (m.languages || m.genre || "").split(",").map(s => s.trim()).filter(Boolean).forEach(l => uniqueLangs.add(l)); });
+      const langList = ["All", ...Array.from(uniqueLangs)];
+      menu.innerHTML = langList.map(lang => {
+        const isActive = selectedLanguage.toLowerCase() === lang.toLowerCase();
+        return `<button onclick="setLanguageFilter('${lang}')" class="whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 border cursor-pointer ${isActive ? 'bg-red-600 text-white border-red-500 shadow-md' : 'bg-[#121624] text-gray-300 hover:text-white hover:bg-gray-800 border-gray-800'}">${lang === 'All' ? '🔥 All' : lang}</button>`;
+      }).join("");
+    }
+
+    window.setLanguageFilter = function(lang) { selectedLanguage = lang; isShowingAll = false; updateLanguagesMenu(allMovies); updateModalLanguages(allMovies); applyFilters(); };
+
+    function applyFilters() {
+      const filtered = allMovies.filter(m => selectedLanguage === "All" || (m.languages || m.genre || "").toLowerCase().includes(selectedLanguage.toLowerCase()));
+      renderGrid(filtered);
+    }
+
+    function renderGrid(moviesList) {
+      const grid = document.getElementById("moviesGrid");
+      if (!grid) return;
+      grid.innerHTML = "";
+      if (moviesList.length === 0) { grid.innerHTML = `<p class="text-gray-500 text-center col-span-full py-16">No movies found in this language.</p>`; return; }
+
+      const shouldLimit = !isShowingAll && moviesList.length > 11;
+      const displayMovies = shouldLimit ? moviesList.slice(0, 11) : moviesList;
+
+      displayMovies.forEach(m => {
+        const posterImg = m.posterUrl && m.posterUrl.trim() !== "" ? m.posterUrl : `https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg`;
+        let langBadgesHtml = (m.languages || m.genre || "").split(',').map(s => s.trim()).filter(Boolean).map(lang => `<span class="bg-[#181d2f] text-red-400 border border-red-500/40 px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase tracking-wider">${lang}</span>`).join("");
+        const card = document.createElement("div");
+        card.className = "cursor-pointer group relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-[#111420] border border-white/10 hover:border-red-500 transition duration-300 transform hover:-translate-y-1 poster-glow";
+        card.innerHTML = `
+          <img src="${posterImg}" alt="${m.title}" draggable="false" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out pointer-events-none" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg'" />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#090b12] via-[#090b12]/60 to-transparent opacity-95 transition pointer-events-none"></div>
+          ${m.year ? `<div class="absolute top-2.5 right-2.5 pointer-events-none"><span class="bg-black/80 backdrop-blur-md text-yellow-400 font-bold px-2 py-0.5 rounded-md border border-white/15 text-[10px] shadow">⭐ ${m.year}</span></div>` : ''}
+          <div class="absolute bottom-0 inset-x-0 p-3 sm:p-3.5 space-y-1.5 flex flex-col justify-end pointer-events-none"><h3 class="font-black text-xs sm:text-sm text-white group-hover:text-red-400 transition line-clamp-2 leading-tight drop-shadow-md">${m.title}</h3>${langBadgesHtml ? `<div class="flex flex-wrap gap-1 pt-1 border-t border-white/10">${langBadgesHtml}</div>` : ''}</div>
+        `;
+        card.addEventListener("click", () => { openMoviePage(m); });
+        grid.appendChild(card);
+      });
+
+      if (shouldLimit) {
+        const remainingCount = moviesList.length - 11;
+        const seeAllCard = document.createElement("div");
+        seeAllCard.className = "cursor-pointer group relative aspect-[4/5] w-full rounded-2xl overflow-hidden see-all-card border border-red-500/40 hover:border-red-500 transition-all duration-300 transform hover:-translate-y-1 flex flex-col items-center justify-center p-4 text-center shadow-lg";
+        seeAllCard.innerHTML = `<div class="relative z-10 flex flex-col items-center space-y-2.5 pointer-events-none"><div class="w-12 h-12 rounded-full bg-red-600/20 border border-red-500/60 flex items-center justify-center text-red-400 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition duration-300"><svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></div><div class="space-y-1 pt-1"><h3 class="font-black text-sm text-white tracking-widest uppercase">SEE ALL</h3><span class="inline-block text-[10px] font-bold bg-red-950/80 text-red-300 border border-red-500/40 px-2.5 py-0.5 rounded-full">+${remainingCount} More</span></div></div>`;
+        seeAllCard.addEventListener("click", () => { isShowingAll = true; renderGrid(moviesList); });
+        grid.appendChild(seeAllCard);
+      }
+    }
+
+    window.openMoviePage = function(m) { currentActiveMovie = m; window.location.hash = createMovieSlug(m); };
+
+    function renderMovieDetail(m) {
+      currentActiveMovie = m;
+      document.title = `${m.title} - MANGALORE MOVIES`;
+
+      document.getElementById("homeView").classList.add("hidden");
+      document.getElementById("detailView").classList.remove("hidden");
+      document.getElementById("detailTitle").innerText = m.title;
+      document.getElementById("detailYear").innerText = m.year || "";
+      document.getElementById("detailDesc").innerText = m.description || "No storyline provided.";
+
+      const langArray = (m.languages || m.genre || "").split(',').map(s => s.trim()).filter(Boolean);
+      document.getElementById("detailGenre").innerText = langArray.length > 0 ? `• ${langArray.join(' • ')} •` : "• Multi-Language •";
+
+      const trailerFrame = document.getElementById("detailTrailerFrame");
+      trailerFrame.src = `https://www.youtube.com/embed/${m.youtubeId}?autoplay=1&mute=0&enablejsapi=1&playsinline=1&rel=0`;
+
+      const groupedDownloads = {};
+      if (m.downloads && m.downloads.length > 0) {
+        m.downloads.forEach(dl => { const lang = dl.language || "Download"; if (!groupedDownloads[lang]) groupedDownloads[lang] = []; groupedDownloads[lang].push(dl); });
+      }
+
+      const listContainer = document.getElementById("detailDownloadsList");
+      const languages = Object.keys(groupedDownloads);
+      if (languages.length > 0) {
+        listContainer.innerHTML = languages.map(lang => {
+          const qualityButtons = groupedDownloads[lang].map(item => `<a href="${item.url}" target="_blank" class="flex items-center justify-between gap-3 bg-gradient-to-r from-red-600/90 to-red-700/90 hover:from-red-500 hover:to-red-600 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold border border-red-500/40 shadow-md transition-all transform hover:scale-[1.02]"><div class="flex items-center gap-2"><span class="tracking-wide">${item.quality}</span>${item.size ? `<span class="text-[10px] bg-black/40 text-red-200 px-2 py-0.5 rounded font-mono">${item.size}</span>` : ''}</div><span class="text-sm">⬇</span></a>`).join("");
+          return `<div class="bg-[#111626] p-3.5 sm:p-4 rounded-2xl border border-white/5 space-y-2.5"><span class="text-xs font-bold text-red-400 bg-red-600/20 px-3 py-0.5 rounded-full border border-red-500/30">🌐 ${lang}</span><div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-0.5">${qualityButtons}</div></div>`;
+        }).join("");
+      } else { listContainer.innerHTML = `<p class="text-xs text-gray-500 italic p-3">No download links added yet.</p>`; }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // THE MAGIC SHARE LINK
+    // This creates the link WITH ?v=ID so WhatsApp & Edge Functions know exactly what to show
+    window.shareMovieLink = async function() {
+      if (!currentActiveMovie) return;
+      const m = currentActiveMovie;
+      const shareUrl = `${window.location.origin}/?v=${m.id}#${createMovieSlug(m)}`;
+      const shareData = { title: `${m.title} - MANGALORE MOVIES`, text: `Watch ${m.title} trailer & download:`, url: shareUrl };
+
+      if (navigator.share) {
+        try { await navigator.share(shareData); } catch (err) {}
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl);
+        const btn = document.getElementById("shareBtn");
+        btn.innerHTML = `<span>✅</span> Copied!`;
+        setTimeout(() => { btn.innerHTML = `<span>🔗 Share</span>`; }, 2000);
+      }
+    };
+
+    function handleRoute() {
+      const docId = extractRequestedDocId();
+      if (!docId) {
+        currentActiveMovie = null;
+        document.title = "MANGALORE MOVIES";
+        const trailer = document.getElementById("detailTrailerFrame");
+        if (trailer) trailer.src = "";
+        document.getElementById("detailView").classList.add("hidden");
+        document.getElementById("homeView").classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const target = allMovies.find(m => m.id === docId);
+        if (target) { renderMovieDetail(target); }
+        else {
+          getDoc(doc(db, "movies", docId)).then(snap => {
+            if (snap.exists()) { renderMovieDetail({ id: snap.id, ...snap.data() }); }
+            else { showHomeView(); }
+          });
+        }
+      }
+    }
+
+    window.showHomeView = function() {
+      if (window.location.hash) { history.back(); }
+      else { handleRoute(); }
+    };
+    window.addEventListener("hashchange", handleRoute);
+
+    document.getElementById("detailUnmuteBtn").addEventListener("click", function() {
+      const iframe = document.getElementById("detailTrailerFrame");
+      iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      this.innerText = "🔊 Sound Enabled";
+      setTimeout(() => this.style.display = "none", 1500);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+[build]
+  publish = "."
+  command = ""
+
+# Connects the Edge Function to all routes to check for ?v=
+[[edge_functions]]
+  function = "share-preview"
+  path = "/*"
+
+# Keeps your app routing working correctly
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
