@@ -2,17 +2,16 @@ export default async (request, context) => {
   const url = new URL(request.url);
   const movieId = url.searchParams.get("v");
 
-  // 1. If not a movie link, load website normally (shows default logo)
+  // 1. If not a movie link, serve the homepage normally
   if (!movieId) return context.next();
 
-  // 2. Detect WhatsApp, Facebook, Telegram, and Meta bots
+  // 2. Bot detection covering all WhatsApp, Facebook, Telegram, and Apple scrapers
   const userAgent = request.headers.get("user-agent") || "";
-  const isBot = /WhatsApp|facebookexternalhit|meta-externalagent|Meta-ExternalFetcher|Facebot|TelegramBot|Twitterbot|Googlebot|Discordbot/i.test(userAgent);
+  const isBot = /WhatsApp|facebookexternalhit|Facebot|meta-externalagent|Meta-ExternalFetcher|TelegramBot|Twitterbot|Googlebot|Discordbot|Applebot/i.test(userAgent);
 
-  // 3. If a real person opens the link in Chrome/Safari, load normally
+  // If a human visitor clicks the link, serve the website
   if (!isBot) return context.next();
 
-  // 4. Fetch the movie details from Firebase
   try {
     const firestoreUrl = `https://firestore.googleapis.com/v1/projects/lottery-e3270/databases/(default)/documents/movies/${movieId}`;
     const dbRes = await fetch(firestoreUrl);
@@ -23,20 +22,35 @@ export default async (request, context) => {
 
       const title = fields.title?.stringValue || "MANGALORE MOVIES";
       const desc = fields.description?.stringValue || "Watch official trailer and download.";
-      const banner = fields.bannerUrl?.stringValue || fields.posterUrl?.stringValue || "https://i.ibb.co/xtdHs2Zb/1000147633-1.png";
+      
+      // Look for bannerUrl, previewThumbnailUrl, posterUrl, or fall back to YouTube thumbnail
+      let img = fields.bannerUrl?.stringValue || 
+                fields.previewThumbnailUrl?.stringValue || 
+                fields.posterUrl?.stringValue || "";
 
-      // Specially optimized Open Graph tags for WhatsApp
+      // If no valid image is provided, fall back to the YouTube HQ thumbnail directly
+      if (!img && fields.youtubeId?.stringValue) {
+        img = `https://img.youtube.com/vi/${fields.youtubeId.stringValue}/hqdefault.jpg`;
+      }
+
+      // Ensure HTTPS protocol
+      if (img.startsWith("http://")) {
+        img = img.replace("http://", "https://");
+      }
+
       const botHtml = `<!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: https://ogp.me/ns#">
 <head>
   <meta charset="UTF-8">
   <title>${title} - MANGALORE MOVIES</title>
-  <meta property="og:type" content="video.movie">
+  
+  <meta property="og:type" content="website">
   <meta property="og:site_name" content="MANGALORE MOVIES">
   <meta property="og:title" content="${title} - MANGALORE MOVIES">
   <meta property="og:description" content="${desc}">
-  <meta property="og:image" content="${banner}">
-  <meta property="og:image:secure_url" content="${banner}">
+  
+  <meta property="og:image" content="${img}">
+  <meta property="og:image:secure_url" content="${img}">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -45,7 +59,7 @@ export default async (request, context) => {
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${title} - MANGALORE MOVIES">
   <meta name="twitter:description" content="${desc}">
-  <meta name="twitter:image" content="${banner}">
+  <meta name="twitter:image" content="${img}">
 </head>
 <body>
   <script>window.location.href = "/?v=${movieId}";</script>
@@ -53,11 +67,14 @@ export default async (request, context) => {
 </html>`;
 
       return new Response(botHtml, {
-        headers: { "Content-Type": "text/html; charset=utf-8" },
+        headers: { 
+          "Content-Type": "text/html; charset=utf-8",
+          "Cache-Control": "public, max-age=300"
+        },
       });
     }
   } catch (err) {
-    console.error("WhatsApp preview error:", err);
+    console.error("WhatsApp Preview Error:", err);
   }
 
   return context.next();
