@@ -1,6 +1,6 @@
 self.addEventListener('push', function(event) {
   let data = {
-    title: 'MANGALORE MOVIES',
+    title: 'MANGALORE MOVIES OFFICIAL',
     message: 'New movie available to watch & download!',
     icon: 'https://i.ibb.co/xtdHs2Zb/1000147633-1.png',
     badge: 'https://i.ibb.co/xtdHs2Zb/1000147633-1.png',
