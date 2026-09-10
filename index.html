@@ -102,7 +102,7 @@
     </div>
   </div>
 
-  <!-- ================= AI CAST & FILM INFO MODAL ================= -->
+  <!-- ================= AI CAST & FILM INFO MODAL WITH DIRECT GOOGLE SEARCH OPTION ================= -->
   <div id="aiCastModal" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-3 sm:p-6 transition-opacity duration-300">
     <div class="w-full max-w-2xl bg-[#0f1422] border border-purple-500/40 rounded-3xl p-4 sm:p-6 shadow-2xl space-y-4 max-h-[88vh] flex flex-col">
       <div class="flex items-center justify-between border-b border-gray-800 pb-3 flex-shrink-0">
@@ -157,7 +157,6 @@
 
   <!-- ================= VIEW 2: SUBMENU "SEE ALL" OTT-STYLE VIEW (#seeall LINK & SHARE) ================= -->
   <section id="seeAllView" class="hidden max-w-7xl mx-auto px-2.5 sm:px-4 py-3 sm:py-5 space-y-4">
-    <!-- Top Bar: Back Button, Dynamic Category Title, Count & Share Button -->
     <div class="flex items-center justify-between gap-2 border-b border-gray-800/80 pb-3 pt-1">
       <div class="flex items-center gap-2.5 min-w-0">
         <button onclick="showHomeView()" class="w-9 h-9 rounded-full bg-gray-800/80 hover:bg-red-600 text-white flex items-center justify-center transition cursor-pointer flex-shrink-0 shadow">
@@ -169,17 +168,13 @@
         </div>
       </div>
 
-      <!-- SHARE COLLECTION BUTTON -->
       <button id="seeAllShareBtn" onclick="shareSeeAllLink()" class="bg-gradient-to-r from-red-600/30 to-red-700/30 hover:bg-red-600 text-red-300 hover:text-white border border-red-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 shadow-md flex-shrink-0 cursor-pointer">
         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
         <span>Share</span>
       </button>
     </div>
 
-    <!-- Quick Language Selector inside See All Submenu -->
     <div id="seeAllFilterMenu" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5"></div>
-
-    <!-- 3-Column Mobile OTT Grid (Matches JioHotstar Screenshot) -->
     <div id="seeAllGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-3.5 pt-1"></div>
   </section>
 
@@ -205,29 +200,35 @@
         <button id="detailUnmuteBtn" class="absolute top-3 sm:top-4 right-3 sm:right-4 bg-black/80 hover:bg-red-600 text-white text-[11px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-md border border-white/20 transition duration-300 flex items-center gap-2 shadow-2xl cursor-pointer"><span>🔊 Unmute / Tap for Sound</span></button>
       </div>
 
+      <!-- TRAILER & DOWNLOAD PAGE: RATING FIRST, NEXT: RUNTIME, BULLET GENRES • Horror • Comedy • Action •, YEAR, LANGUAGE -->
       <div class="space-y-4 border-b border-gray-800/80 pb-6">
         <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
+          <!-- 1. RATING FIRST PLACE -->
           <div id="detailRatingBadge" class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/25 to-yellow-500/25 border border-yellow-500/50 text-yellow-400 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-black shadow-lg shadow-yellow-500/10">
             <span class="text-sm sm:text-base">⭐</span>
             <span id="detailRatingText">8.5 / 10</span>
             <span class="text-[9px] sm:text-[10px] text-yellow-300 font-bold uppercase tracking-wider pl-1.5 border-l border-yellow-500/40">Rating</span>
           </div>
 
+          <!-- 2. NEXT PLACE: RUNTIME -->
           <div id="detailRuntimeBadge" class="inline-flex items-center gap-1.5 bg-emerald-950/50 border border-emerald-500/40 text-emerald-400 px-3 py-1.5 rounded-full text-xs sm:text-sm font-mono font-bold shadow-inner">
             <span>⏱</span>
             <span id="detailRuntimeText">2h 15m</span>
           </div>
 
+          <!-- 3. NEXT PLACE: BULLET GENRES LIKE • Horror • Comedy • Action •  -->
           <div id="detailGenreBadge" class="inline-flex items-center gap-1.5 bg-purple-950/50 border border-purple-500/40 text-purple-300 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold shadow-inner">
             <span>🎬</span>
-            <span id="detailGenreText">Action / Crime / Thriller</span>
+            <span id="detailGenreText"> • Horror • Comedy • Action • </span>
           </div>
 
+          <!-- 4. NEXT PLACE: YEAR -->
           <div class="inline-flex items-center gap-1 bg-black/60 border border-white/15 text-gray-300 px-3 py-1.5 rounded-full text-xs font-mono font-bold">
             <span>📅</span>
             <span id="detailYear">2026</span>
           </div>
 
+          <!-- 5. NEXT PLACE: LANGUAGE (BOX TYPE) -->
           <div id="detailLanguagesBadge" class="inline-flex items-center gap-1.5 bg-blue-950/50 border border-blue-500/40 text-blue-300 px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wide">
             <span>🌐</span>
             <span id="detailLanguagesText">Kannada, Tulu</span>
@@ -298,7 +299,7 @@
 
     const OMDB_KEYS = ["b8449bf3", "720c3666", "e3d16ce9", "f500aj11", "trilogy"];
 
-    // Native language mappings matching the JioHotstar poster aesthetics
+    // Native language mappings for JioHotstar-style cards
     const NATIVE_LANG_LABELS = {
       "kannada": "ಕನ್ನಡ",
       "tulu": "ತುಳು",
@@ -309,6 +310,10 @@
       "hindi": "हिन्दी",
       "english": "English"
     };
+
+    const KNOWN_LANG_WORDS = new Set([
+      "kannada", "tulu", "telugu", "tamil", "malayalam", "malyalam", "hindi", "english"
+    ]);
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', async () => {
@@ -407,6 +412,21 @@
         "Horror / Mystery / Thriller"
       ];
       return presets[Math.abs(hash) % presets.length];
+    }
+
+    // Formats genre cleanly as bullets:  • Horror • Comedy • Action • 
+    function formatBulletGenres(genreStr) {
+      if (!genreStr) return " • Movie • ";
+      const parts = genreStr.split(/[\/,|•-]+/).map(s => s.trim()).filter(Boolean);
+      const cleanGenres = [];
+      parts.forEach(p => {
+        const normalized = p.charAt(0).toUpperCase() + p.slice(1).toLowerCase();
+        if (!cleanGenres.includes(normalized) && !KNOWN_LANG_WORDS.has(normalized.toLowerCase())) {
+          cleanGenres.push(normalized);
+        }
+      });
+      if (cleanGenres.length === 0) return " • Cinema • ";
+      return ` • ${cleanGenres.join(" • ")} • `;
     }
 
     function getMovieRating(m) {
@@ -540,6 +560,7 @@
       handleRoute();
     });
 
+    // Hero Slider
     function initHeroSlider(movies) {
       const wrapper = document.getElementById("heroSliderWrapper");
       const container = document.getElementById("heroSliderContainer");
@@ -615,7 +636,7 @@
       if (!term) { resultsContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">Type above to search movies...</p>`; return; }
       const matches = allMovies.filter(m => (m.title || "").toLowerCase().includes(term) || (m.languages || "").toLowerCase().includes(term) || getMovieRealGenre(m).toLowerCase().includes(term));
       if (matches.length === 0) { resultsContainer.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">No movies found matching "${term}".</p>`; return; }
-      resultsContainer.innerHTML = matches.map(m => `<div onclick="selectMovieFromSearch('${m.id}')" class="flex items-center gap-3 p-2.5 bg-[#14192b] hover:bg-gray-800 rounded-xl border border-gray-800 hover:border-red-500/50 cursor-pointer transition"><img src="${m.posterUrl || `https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg`}" class="w-12 h-14 object-cover rounded-lg flex-shrink-0" /><div class="flex-1 min-w-0"><h4 class="text-sm font-bold text-white truncate">${m.title}</h4><p class="text-[11px] text-purple-300 font-semibold truncate">${getMovieRealGenre(m)}</p><p class="text-[10px] text-gray-400 truncate">${extractPureLanguages(m).join(", ")} • ${getMovieRuntime(m)} • ${m.year || ''}</p></div><span class="text-xs text-red-400 font-bold px-2 py-1 bg-red-950/60 rounded">View ▶</span></div>`).join("");
+      resultsContainer.innerHTML = matches.map(m => `<div onclick="selectMovieFromSearch('${m.id}')" class="flex items-center gap-3 p-2.5 bg-[#14192b] hover:bg-gray-800 rounded-xl border border-gray-800 hover:border-red-500/50 cursor-pointer transition"><img src="${m.posterUrl || `https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg`}" class="w-12 h-14 object-cover rounded-lg flex-shrink-0" /><div class="flex-1 min-w-0"><h4 class="text-sm font-bold text-white truncate">${m.title}</h4><p class="text-[10px] text-gray-400 truncate">${extractPureLanguages(m).join(", ")} • ${getMovieRuntime(m)} • ${m.year || ''}</p></div><span class="text-xs text-red-400 font-bold px-2 py-1 bg-red-950/60 rounded">View ▶</span></div>`).join("");
     }
     window.selectMovieFromSearch = function(movieId) { closeSearchModal(); const target = allMovies.find(m => m.id === movieId); if (target) openMoviePage(target); };
 
@@ -660,7 +681,7 @@
       renderGrid(filtered);
     }
 
-    // ================= HOME GRID (WITH SEE ALL BUTTON GENERATING #seeall) =================
+    // ================= HOME GRID (GENRES REMOVED FROM POSTERS; SEE ALL GENERATES #seeall) =================
     function renderGrid(moviesList) {
       const grid = document.getElementById("moviesGrid");
       if (!grid) return;
@@ -673,29 +694,28 @@
       displayMovies.forEach(m => {
         const posterImg = m.posterUrl && m.posterUrl.trim() !== "" ? m.posterUrl : `https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg`;
         const autoRuntime = getMovieRuntime(m);
-        const autoGenre = getMovieRealGenre(m);
         const autoRating = getMovieRating(m).split(" ")[0];
 
+        // Strict Box Type Language Badges
         const pureLangs = extractPureLanguages(m);
         let langBadgesHtml = pureLangs.map(lang => `<span class="bg-[#121829] text-blue-300 border border-blue-500/40 px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase shadow-sm">${lang}</span>`).join("");
         
+        // Poster Card with GENRES REMOVED from home posters!
         const card = document.createElement("div");
         card.className = "cursor-pointer group relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-[#111420] border border-white/10 hover:border-red-500 transition duration-300 transform hover:-translate-y-1 poster-glow";
         card.innerHTML = `
           <img src="${posterImg}" alt="${m.title}" draggable="false" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out pointer-events-none" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg'" />
           <div class="absolute inset-0 bg-gradient-to-t from-[#090b12] via-[#090b12]/65 to-transparent opacity-95 transition pointer-events-none"></div>
           
+          <!-- TOP CORNERS: RATING & RUNTIME -->
           <div class="absolute top-2.5 inset-x-2.5 flex justify-between items-center pointer-events-none">
             <span class="bg-black/85 backdrop-blur-md text-yellow-400 font-black px-2 py-0.5 rounded-md border border-yellow-500/30 text-[10px] shadow">⭐ ${autoRating}</span>
             <span class="bg-black/85 backdrop-blur-md text-emerald-400 font-mono font-bold px-2 py-0.5 rounded-md border border-emerald-500/30 text-[10px] shadow">⏱ ${autoRuntime}</span>
           </div>
 
+          <!-- BOTTOM INFO: MOVIE TITLE & BOX TYPE LANGUAGES (GENRES REMOVED) -->
           <div class="absolute bottom-0 inset-x-0 p-2.5 sm:p-3 space-y-1.5 flex flex-col justify-end pointer-events-none">
             <h3 class="font-black text-xs sm:text-sm text-white group-hover:text-red-400 transition line-clamp-1 leading-tight drop-shadow-md">${m.title}</h3>
-            <div class="flex items-center gap-1 text-[10px] text-purple-300 font-bold truncate">
-              <span class="text-purple-400 flex-shrink-0">🎬</span>
-              <span class="truncate">${autoGenre}</span>
-            </div>
             <div class="flex flex-wrap gap-1 pt-0.5">
               ${langBadgesHtml}
             </div>
@@ -728,7 +748,7 @@
       }
     }
 
-    // ================= SUBMENU "SEE ALL" RENDERER (3-COLUMN JIOHOTSTAR OTT-STYLE) =================
+    // ================= SUBMENU "SEE ALL" OTT-STYLE RENDERER =================
     function navigateToSeeAll(lang = null) {
       if (lang) selectedLanguage = lang;
       const langSlug = selectedLanguage !== "All" ? `-${selectedLanguage.toLowerCase()}` : "";
@@ -747,7 +767,6 @@
       titleEl.innerText = selectedLanguage === "All" ? "All Movies" : `${selectedLanguage} Movies`;
       subtitleEl.innerText = `${filtered.length} Movies Available • Theatrical Blockbusters`;
 
-      // Render Submenu Language Filter Pills
       const uniqueLangs = new Set();
       allMovies.forEach(m => { extractPureLanguages(m).forEach(l => uniqueLangs.add(l)); });
       const langList = ["All", ...Array.from(uniqueLangs)];
@@ -766,7 +785,7 @@
         return;
       }
 
-      // Render 3-Column Posters matching JioHotstar screenshot
+      // Render 3-Column Posters matching Hotstar screenshot with TOP 10 and native language labels
       grid.innerHTML = filtered.map((m, idx) => {
         const posterImg = m.posterUrl && m.posterUrl.trim() !== "" ? m.posterUrl : `https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg`;
         const nativeLang = getNativeLangLabel(m.languages);
@@ -776,14 +795,14 @@
             <img src="${posterImg}" alt="${m.title}" draggable="false" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out pointer-events-none" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg'" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/20 opacity-80 pointer-events-none"></div>
 
-            <!-- TOP 10 PINK/MAGENTA BADGE (Exact match to JioHotstar screenshot) -->
+            <!-- TOP 10 MAGENTA BADGE -->
             ${idx < 10 ? `
               <div class="absolute top-1.5 right-1.5 pointer-events-none z-10">
                 <span class="bg-gradient-to-r from-pink-600 to-fuchsia-600 text-white text-[8px] sm:text-[9px] font-black px-1.5 py-0.5 rounded shadow tracking-tighter uppercase">TOP 10</span>
               </div>
             ` : ''}
 
-            <!-- BOTTOM INFO: NATIVE LANGUAGE SCRIPT (MATCHES SCREENSHOT) & TITLE -->
+            <!-- NATIVE SCRIPT AND TITLE -->
             <div class="absolute bottom-1.5 inset-x-1.5 space-y-0.5 text-center pointer-events-none">
               ${nativeLang ? `<p class="text-[11px] sm:text-xs font-black text-gray-200 drop-shadow-md tracking-wider">${nativeLang}</p>` : ''}
               <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 truncate opacity-90">${m.title}</p>
@@ -856,21 +875,30 @@
       const defaultRuntime = getMovieRuntime(m);
       document.getElementById("detailRuntimeText").innerText = defaultRuntime;
 
-      const defaultGenre = getMovieRealGenre(m);
-      document.getElementById("detailGenreText").innerText = defaultGenre;
+      // FORMAT GENRE LIKE:  • Horror • Comedy • Action • 
+      const realGenre = getMovieRealGenre(m);
+      document.getElementById("detailGenreText").innerText = formatBulletGenres(realGenre);
 
       const pureLangs = extractPureLanguages(m);
       document.getElementById("detailLanguagesText").innerText = pureLangs.join(', ');
 
       const dirRow = document.getElementById("detailDirectorRow");
-      dirRow.classList.add("hidden");
+      const dirText = document.getElementById("detailDirectorText");
+      
+      if (m.director) {
+        dirText.innerText = m.director;
+        dirRow.classList.remove("hidden");
+        dirRow.classList.add("flex");
+      } else {
+        dirRow.classList.add("hidden");
+      }
 
-      fetchAiMovieCastAndDetails(m.title, m.year).then(aiData => {
+      fetchAiMovieCastAndDetails(m).then(aiData => {
         if (currentActiveMovie && currentActiveMovie.id === m.id && aiData) {
-          if (aiData.runtime) document.getElementById("detailRuntimeText").innerText = aiData.runtime;
-          if (aiData.genres) document.getElementById("detailGenreText").innerText = aiData.genres;
+          if (aiData.runtime && !m.runtime) document.getElementById("detailRuntimeText").innerText = aiData.runtime;
+          if (aiData.genres && !m.genre) document.getElementById("detailGenreText").innerText = formatBulletGenres(aiData.genres);
           if (aiData.director) {
-            document.getElementById("detailDirectorText").innerText = aiData.director;
+            dirText.innerText = aiData.director;
             dirRow.classList.remove("hidden");
             dirRow.classList.add("flex");
           }
@@ -900,7 +928,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ================= AI CAST & FILM INFO RESOLVER =================
+    // ================= AI METADATA & CAST RESOLVER =================
     async function fetchFromOmdbDirect(title = null, year = null) {
       if (!title) return null;
       for (const key of OMDB_KEYS) {
@@ -941,27 +969,41 @@
       return results;
     }
 
-    async function fetchAiMovieCastAndDetails(movieTitle, movieYear) {
-      const cacheKey = `${(movieTitle || "").toLowerCase().trim()}_${movieYear || ""}`;
+    async function fetchAiMovieCastAndDetails(m) {
+      const cacheKey = `${(m.title || "").toLowerCase().trim()}_${m.year || ""}`;
       if (movieAiDataCache.has(cacheKey)) return movieAiDataCache.get(cacheKey);
 
-      let resolvedTitle = movieTitle.trim();
-      let omdbData = await fetchFromOmdbDirect(resolvedTitle, movieYear);
+      // Direct from Firestore (Saved from Admin Panel via IMDb / BookMyShow)
+      if (m.cast && Array.isArray(m.cast) && m.cast.length > 0) {
+        const directResult = {
+          runtime: m.runtime || getMovieRuntime(m),
+          director: m.director || null,
+          genres: m.genre || getMovieRealGenre(m),
+          storyline: m.description || null,
+          cast: m.cast
+        };
+        movieAiDataCache.set(cacheKey, directResult);
+        return directResult;
+      }
+
+      // Live AI Fallback
+      let resolvedTitle = (m.title || "").trim();
+      let omdbData = await fetchFromOmdbDirect(resolvedTitle, m.year);
 
       let starNames = [];
-      let director = null;
-      let runtime = null;
-      let genres = null;
-      let storyline = null;
+      let director = m.director || null;
+      let runtime = m.runtime ? formatMinutesToHours(m.runtime) : null;
+      let genres = m.genre || null;
+      let storyline = m.description || null;
 
       if (omdbData) {
         if (omdbData.Actors && omdbData.Actors !== "N/A") {
           starNames = omdbData.Actors.split(",").map(s => s.trim()).filter(Boolean);
         }
-        if (omdbData.Director && omdbData.Director !== "N/A") director = omdbData.Director;
-        if (omdbData.Runtime && omdbData.Runtime !== "N/A") runtime = formatMinutesToHours(omdbData.Runtime);
-        if (omdbData.Genre && omdbData.Genre !== "N/A") genres = omdbData.Genre.split(",").map(s => s.trim()).join(" / ");
-        if (omdbData.Plot && omdbData.Plot !== "N/A") storyline = omdbData.Plot;
+        if (!director && omdbData.Director && omdbData.Director !== "N/A") director = omdbData.Director;
+        if (!runtime && omdbData.Runtime && omdbData.Runtime !== "N/A") runtime = formatMinutesToHours(omdbData.Runtime);
+        if (!genres && omdbData.Genre && omdbData.Genre !== "N/A") genres = omdbData.Genre.split(",").map(s => s.trim()).join(" / ");
+        if (!storyline && omdbData.Plot && omdbData.Plot !== "N/A") storyline = omdbData.Plot;
       }
 
       try {
@@ -1044,7 +1086,7 @@
       return result;
     }
 
-    // ================= AI CAST MODAL =================
+    // ================= AI CAST MODAL (WITH DIRECT GOOGLE SEARCH OPTION) =================
     window.openAiCastModal = async function() {
       const modal = document.getElementById("aiCastModal");
       const content = document.getElementById("aiCastModalContent");
@@ -1062,39 +1104,48 @@
         </div>
       `;
 
-      const aiData = await fetchAiMovieCastAndDetails(m.title, m.year);
+      const aiData = await fetchAiMovieCastAndDetails(m);
       const finalGenre = aiData?.genres || getMovieRealGenre(m);
       const finalRuntime = aiData?.runtime || getMovieRuntime(m);
+      const directorName = aiData?.director || m.director || null;
 
+      const googleFullSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(m.title + ' movie cast director release date reviews storyline')}`;
+
+      let castCardsHtml = "";
       if (aiData && aiData.cast && aiData.cast.length > 0) {
-        const castCardsHtml = aiData.cast.map(person => `
+        castCardsHtml = aiData.cast.map(person => `
           <div class="bg-[#14192b] border border-gray-800/90 hover:border-purple-500/50 rounded-2xl overflow-hidden transition-all duration-300 flex flex-col group shadow-lg">
             <div class="w-full aspect-[4/5] bg-[#0c101c] overflow-hidden relative">
-              <img src="${person.photo}" alt="${person.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 pointer-events-none" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(person.name)}&background=1e2438&color=ef4444&bold=true&size=256'"/>
+              <img src="${person.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(person.name)}&background=1e2438&color=ef4444&bold=true&size=256`}" alt="${person.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 pointer-events-none" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(person.name)}&background=1e2438&color=ef4444&bold=true&size=256'"/>
               <div class="absolute inset-0 bg-gradient-to-t from-[#14192b] via-transparent to-transparent opacity-75"></div>
               ${person.isDirector ? `<span class="absolute top-2 left-2 bg-blue-600 text-white text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider shadow">Director</span>` : ''}
             </div>
             <div class="p-3 flex-1 flex flex-col justify-between space-y-1">
               <h5 class="font-extrabold text-xs sm:text-sm text-white group-hover:text-purple-300 transition line-clamp-1">${person.name}</h5>
-              <p class="text-[10px] text-gray-400 line-clamp-1">${person.role || 'Cast Member'}</p>
+              <p class="text-[10px] text-gray-400 line-clamp-1">${person.role || (person.isDirector ? 'Director' : 'Lead Cast')}</p>
             </div>
           </div>
         `).join("");
+      }
 
-        content.innerHTML = `
-          <div class="space-y-4">
-            <div class="bg-gradient-to-r from-purple-950/40 via-[#161d33] to-[#121626] p-3.5 rounded-2xl border border-purple-500/30 space-y-2 shadow-md">
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <h4 class="text-sm sm:text-base font-black text-white">${m.title}</h4>
-                <span class="text-yellow-400 text-xs font-bold bg-yellow-500/10 border border-yellow-500/30 px-2.5 py-0.5 rounded-full">⭐ ${getMovieRating(m)}</span>
-              </div>
-              <div class="flex flex-wrap items-center gap-2 text-xs">
-                <span class="text-purple-300 font-extrabold bg-purple-900/30 border border-purple-500/30 px-2.5 py-1 rounded-md">🎬 ${finalGenre}</span>
-                <span class="text-emerald-400 font-mono font-bold bg-emerald-950/40 border border-emerald-500/30 px-2.5 py-1 rounded-md">⏱ ${finalRuntime}</span>
-                ${aiData.director ? `<span class="text-blue-300 font-bold bg-blue-950/40 border border-blue-500/30 px-2.5 py-1 rounded-md">🎥 Dir: ${aiData.director}</span>` : ''}
-              </div>
+      content.innerHTML = `
+        <div class="space-y-4">
+          <!-- 1. FILM SUMMARY OVERVIEW -->
+          <div class="bg-gradient-to-r from-purple-950/40 via-[#161d33] to-[#121626] p-3.5 rounded-2xl border border-purple-500/30 space-y-2 shadow-md">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h4 class="text-sm sm:text-base font-black text-white">${m.title}</h4>
+              <span class="text-yellow-400 text-xs font-bold bg-yellow-500/10 border border-yellow-500/30 px-2.5 py-0.5 rounded-full">⭐ ${getMovieRating(m)}</span>
             </div>
+            <div class="flex flex-wrap items-center gap-2 text-xs">
+              <span class="text-purple-300 font-extrabold bg-purple-900/30 border border-purple-500/30 px-2.5 py-1 rounded-md">🎬 ${formatBulletGenres(finalGenre)}</span>
+              <span class="text-emerald-400 font-mono font-bold bg-emerald-950/40 border border-emerald-500/30 px-2.5 py-1 rounded-md">⏱ ${finalRuntime}</span>
+              ${directorName ? `<span class="text-blue-300 font-bold bg-blue-950/40 border border-blue-500/30 px-2.5 py-1 rounded-md">🎥 Dir: ${directorName}</span>` : ''}
+            </div>
+            ${aiData?.storyline ? `<p class="text-xs text-gray-300 leading-relaxed pt-1 line-clamp-3">${aiData.storyline}</p>` : ''}
+          </div>
 
+          <!-- 2. STAR CAST & CREW WITH REAL PHOTOS -->
+          ${castCardsHtml ? `
             <div>
               <div class="flex items-center justify-between mb-2.5">
                 <h5 class="text-xs font-black text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
@@ -1106,21 +1157,22 @@
                 ${castCardsHtml}
               </div>
             </div>
-          </div>
-        `;
-      } else {
-        content.innerHTML = `
-          <div class="text-center py-8 space-y-3">
-            <div class="w-14 h-14 bg-purple-600/20 text-purple-400 border border-purple-500/40 rounded-full flex items-center justify-center mx-auto text-2xl">🎭</div>
-            <div class="space-y-1 max-w-md mx-auto">
-              <h4 class="text-base font-black text-white">${m.title}</h4>
-              <p class="text-xs text-purple-300 font-bold">🎬 ${finalGenre}</p>
-              <p class="text-xs text-emerald-300 font-mono">⏱ ${finalRuntime}</p>
-              <p class="text-xs text-gray-400 pt-2">${m.description || 'Verified Indian cinema available for watch & download.'}</p>
+          ` : `
+            <div class="text-center py-6 space-y-2 bg-[#14192b] border border-gray-800 rounded-2xl p-4">
+              <p class="text-xs text-gray-400">Full cast info is ready to explore directly via Google Search below.</p>
             </div>
+          `}
+
+          <!-- 3. DIRECT GOOGLE SEARCH FOR FULL INFORMATION -->
+          <div class="pt-2 border-t border-gray-800/80">
+            <a href="${googleFullSearchUrl}" target="_blank" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-extrabold text-xs sm:text-sm py-3 px-4 rounded-2xl transition flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer transform hover:scale-[1.01] active:scale-95">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+              <span>Search Full Movie Information on Google Directly</span>
+              <span class="text-xs">↗</span>
+            </a>
           </div>
-        `;
-      }
+        </div>
+      `;
     };
 
     window.closeAiCastModal = function() { document.getElementById("aiCastModal").classList.add("hidden"); };
@@ -1141,7 +1193,6 @@
       }
     };
 
-    // ================= HASH-BASED NAVIGATION ROUTING (#seeall, #movie, Home) =================
     function handleRoute() {
       const hash = window.location.hash;
 
