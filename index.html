@@ -123,7 +123,7 @@
     </div>
   </div>
 
-  <!-- ================= TOP NAVBAR ================= -->
+  <!-- ================= TOP NAVBAR (CLICK TEXT/LOGO OPENS HOME SCREEN) ================= -->
   <header class="border-b border-gray-800/80 bg-[#0d101a]/95 backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center gap-3">
       <button onclick="showHomeView()" class="flex items-center gap-2.5 group focus:outline-none cursor-pointer">
@@ -181,6 +181,7 @@
   <!-- ================= VIEW 3: TRAILER & DOWNLOAD PAGE ================= -->
   <section id="detailView" class="hidden max-w-5xl mx-auto px-4 py-6 sm:py-8">
     <div class="flex justify-between items-center mb-6 gap-2">
+      <!-- FIXED BACK BUTTON (CLEANLY EXITS DIRECT LINK & OPENS HOME SCREEN) -->
       <button onclick="navigateBackFromDetail()" class="bg-[#121624] hover:bg-gray-800 text-gray-200 border border-gray-800 hover:border-red-500 px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold transition flex items-center gap-2 shadow-lg cursor-pointer"><span>⬅</span> Back</button>
       <div class="flex items-center gap-2">
         <button id="aiCastBtn" onclick="openAiCastModal()" class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white border border-purple-400/50 px-3.5 sm:px-4 py-2.5 rounded-full text-xs sm:text-sm font-extrabold transition flex items-center gap-1.5 shadow-lg shadow-purple-600/30 cursor-pointer transform hover:scale-105 active:scale-95">
@@ -299,7 +300,6 @@
 
     const OMDB_KEYS = ["b8449bf3", "720c3666", "e3d16ce9", "f500aj11", "trilogy"];
 
-    // Native language mappings for JioHotstar-style cards
     const NATIVE_LANG_LABELS = {
       "kannada": "ಕನ್ನಡ",
       "tulu": "ತುಳು",
@@ -353,7 +353,9 @@
       const uniqueLangs = [];
       tokens.forEach(l => {
         const up = l.toUpperCase();
-        if (!uniqueLangs.includes(up)) uniqueLangs.push(up);
+        if (!uniqueLangs.includes(up)) {
+          uniqueLangs.push(up);
+        }
       });
       return uniqueLangs.length > 0 ? uniqueLangs : ["MULTI-AUDIO"];
     }
@@ -388,16 +390,22 @@
         const parts = m.genre.split(/[\/,| -]+/).map(s => s.trim()).filter(Boolean);
         parts.forEach(part => {
           VALID_CINEMA_GENRES.forEach(g => {
-            if (g.regex.test(part) && !detected.includes(g.name)) detected.push(g.name);
+            if (g.regex.test(part) && !detected.includes(g.name)) {
+              detected.push(g.name);
+            }
           });
         });
       }
       if (m.description) {
         VALID_CINEMA_GENRES.forEach(g => {
-          if (g.regex.test(m.description) && !detected.includes(g.name)) detected.push(g.name);
+          if (g.regex.test(m.description) && !detected.includes(g.name)) {
+            detected.push(g.name);
+          }
         });
       }
-      if (detected.length > 0) return detected.slice(0, 4).join(" / ");
+      if (detected.length > 0) {
+        return detected.slice(0, 4).join(" / ");
+      }
 
       let hash = 0;
       const str = m.title || "Movie";
@@ -461,6 +469,21 @@
         return `${h}h ${m}m`;
       }
       return minStr;
+    }
+
+    const directId = extractRequestedDocId();
+    if (directId) {
+      document.getElementById("homeView").classList.add("hidden");
+      document.getElementById("detailView").classList.remove("hidden");
+      document.getElementById("detailTitle").innerText = "Loading Movie...";
+      
+      getDoc(doc(db, "movies", directId)).then((snap) => {
+        if (snap.exists()) {
+          const m = { id: snap.id, ...snap.data() };
+          currentActiveMovie = m;
+          renderMovieDetail(m);
+        } else { showHomeView(); }
+      }).catch(e => { showHomeView(); });
     }
 
     onSnapshot(doc(db, "settings", "general"), (snap) => {
@@ -681,7 +704,7 @@
       renderGrid(filtered);
     }
 
-    // ================= HOME GRID (GENRES REMOVED FROM POSTERS; SEE ALL GENERATES #seeall) =================
+    // ================= HOME GRID =================
     function renderGrid(moviesList) {
       const grid = document.getElementById("moviesGrid");
       if (!grid) return;
@@ -696,24 +719,20 @@
         const autoRuntime = getMovieRuntime(m);
         const autoRating = getMovieRating(m).split(" ")[0];
 
-        // Strict Box Type Language Badges
         const pureLangs = extractPureLanguages(m);
         let langBadgesHtml = pureLangs.map(lang => `<span class="bg-[#121829] text-blue-300 border border-blue-500/40 px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase shadow-sm">${lang}</span>`).join("");
         
-        // Poster Card with GENRES REMOVED from home posters!
         const card = document.createElement("div");
         card.className = "cursor-pointer group relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-[#111420] border border-white/10 hover:border-red-500 transition duration-300 transform hover:-translate-y-1 poster-glow";
         card.innerHTML = `
           <img src="${posterImg}" alt="${m.title}" draggable="false" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out pointer-events-none" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg'" />
           <div class="absolute inset-0 bg-gradient-to-t from-[#090b12] via-[#090b12]/65 to-transparent opacity-95 transition pointer-events-none"></div>
           
-          <!-- TOP CORNERS: RATING & RUNTIME -->
           <div class="absolute top-2.5 inset-x-2.5 flex justify-between items-center pointer-events-none">
             <span class="bg-black/85 backdrop-blur-md text-yellow-400 font-black px-2 py-0.5 rounded-md border border-yellow-500/30 text-[10px] shadow">⭐ ${autoRating}</span>
             <span class="bg-black/85 backdrop-blur-md text-emerald-400 font-mono font-bold px-2 py-0.5 rounded-md border border-emerald-500/30 text-[10px] shadow">⏱ ${autoRuntime}</span>
           </div>
 
-          <!-- BOTTOM INFO: MOVIE TITLE & BOX TYPE LANGUAGES (GENRES REMOVED) -->
           <div class="absolute bottom-0 inset-x-0 p-2.5 sm:p-3 space-y-1.5 flex flex-col justify-end pointer-events-none">
             <h3 class="font-black text-xs sm:text-sm text-white group-hover:text-red-400 transition line-clamp-1 leading-tight drop-shadow-md">${m.title}</h3>
             <div class="flex flex-wrap gap-1 pt-0.5">
@@ -725,7 +744,6 @@
         grid.appendChild(card);
       });
 
-      // SEE ALL CARD (ROUTES TO #seeall)
       if (shouldLimit) {
         const remainingCount = moviesList.length - 11;
         const seeAllCard = document.createElement("div");
@@ -785,7 +803,6 @@
         return;
       }
 
-      // Render 3-Column Posters matching Hotstar screenshot with TOP 10 and native language labels
       grid.innerHTML = filtered.map((m, idx) => {
         const posterImg = m.posterUrl && m.posterUrl.trim() !== "" ? m.posterUrl : `https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg`;
         const nativeLang = getNativeLangLabel(m.languages);
@@ -795,14 +812,12 @@
             <img src="${posterImg}" alt="${m.title}" draggable="false" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out pointer-events-none" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg'" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/20 opacity-80 pointer-events-none"></div>
 
-            <!-- TOP 10 MAGENTA BADGE -->
             ${idx < 10 ? `
               <div class="absolute top-1.5 right-1.5 pointer-events-none z-10">
                 <span class="bg-gradient-to-r from-pink-600 to-fuchsia-600 text-white text-[8px] sm:text-[9px] font-black px-1.5 py-0.5 rounded shadow tracking-tighter uppercase">TOP 10</span>
               </div>
             ` : ''}
 
-            <!-- NATIVE SCRIPT AND TITLE -->
             <div class="absolute bottom-1.5 inset-x-1.5 space-y-0.5 text-center pointer-events-none">
               ${nativeLang ? `<p class="text-[11px] sm:text-xs font-black text-gray-200 drop-shadow-md tracking-wider">${nativeLang}</p>` : ''}
               <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 truncate opacity-90">${m.title}</p>
@@ -849,8 +864,14 @@
       window.location.hash = createMovieSlug(m);
     };
 
+    // ================= ROBUST NAVIGATION BACK (FIXES DIRECT SHARED LINKS) =================
     window.navigateBackFromDetail = function() {
-      if (window.history.length > 1) {
+      // If opened via shared direct link (?v=, ?m=, ?id=), return to Home screen cleanly
+      if (window.location.search && (window.location.search.includes('v=') || window.location.search.includes('m=') || window.location.search.includes('id='))) {
+        showHomeView();
+        return;
+      }
+      if (window.history.length > 1 && document.referrer && document.referrer.includes(window.location.host)) {
         window.history.back();
       } else {
         showHomeView();
@@ -875,7 +896,6 @@
       const defaultRuntime = getMovieRuntime(m);
       document.getElementById("detailRuntimeText").innerText = defaultRuntime;
 
-      // FORMAT GENRE LIKE:  • Horror • Comedy • Action • 
       const realGenre = getMovieRealGenre(m);
       document.getElementById("detailGenreText").innerText = formatBulletGenres(realGenre);
 
@@ -1130,7 +1150,6 @@
 
       content.innerHTML = `
         <div class="space-y-4">
-          <!-- 1. FILM SUMMARY OVERVIEW -->
           <div class="bg-gradient-to-r from-purple-950/40 via-[#161d33] to-[#121626] p-3.5 rounded-2xl border border-purple-500/30 space-y-2 shadow-md">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <h4 class="text-sm sm:text-base font-black text-white">${m.title}</h4>
@@ -1144,7 +1163,6 @@
             ${aiData?.storyline ? `<p class="text-xs text-gray-300 leading-relaxed pt-1 line-clamp-3">${aiData.storyline}</p>` : ''}
           </div>
 
-          <!-- 2. STAR CAST & CREW WITH REAL PHOTOS -->
           ${castCardsHtml ? `
             <div>
               <div class="flex items-center justify-between mb-2.5">
@@ -1163,7 +1181,6 @@
             </div>
           `}
 
-          <!-- 3. DIRECT GOOGLE SEARCH FOR FULL INFORMATION -->
           <div class="pt-2 border-t border-gray-800/80">
             <a href="${googleFullSearchUrl}" target="_blank" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-extrabold text-xs sm:text-sm py-3 px-4 rounded-2xl transition flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer transform hover:scale-[1.01] active:scale-95">
               <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
@@ -1193,6 +1210,7 @@
       }
     };
 
+    // ================= ROUTER: HANDLES SHARED LINKS, SEE ALL & HOME =================
     function handleRoute() {
       const hash = window.location.hash;
 
@@ -1245,15 +1263,18 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    // ================= FIXED HOME & BACK BEHAVIOR (STRIPS ?v=... & #... TO OPEN HOME VIEW CLEANLY) =================
     window.showHomeView = function() {
       selectedLanguage = "All";
-      if (window.location.hash) {
-        history.pushState("", document.title, window.location.pathname + window.location.search);
+      // Clear URL query parameters (?v=...) and hash so it returns directly to Home screen
+      if (window.location.search || window.location.hash) {
+        history.pushState("", document.title, window.location.pathname);
       }
       handleRoute();
     };
 
     window.addEventListener("hashchange", handleRoute);
+    window.addEventListener("popstate", handleRoute);
 
     document.getElementById("detailUnmuteBtn").addEventListener("click", function() {
       const iframe = document.getElementById("detailTrailerFrame");
