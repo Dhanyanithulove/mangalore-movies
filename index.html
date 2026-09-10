@@ -42,6 +42,7 @@
     @keyframes neonGlow { 0%, 100% { box-shadow: 0 0 25px rgba(220, 38, 38, 0.4), inset 0 0 15px rgba(220, 38, 38, 0.2); } 50% { box-shadow: 0 0 45px rgba(220, 38, 38, 0.8), inset 0 0 25px rgba(220, 38, 38, 0.4); } }
     .intro-logo-anim { animation: introPop 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards, neonGlow 2s infinite ease-in-out; }
     .see-all-card { background: radial-gradient(circle at top, rgba(220, 38, 38, 0.25) 0%, rgba(18, 22, 36, 0.9) 70%); }
+    .hotstar-card { aspect-ratio: 2 / 3; }
   </style>
 </head>
 <body class="bg-[#07090f] text-gray-100 min-h-screen antialiased selection:bg-transparent selection:text-white pb-20 sm:pb-24" oncontextmenu="return false;">
@@ -101,7 +102,7 @@
     </div>
   </div>
 
-  <!-- ================= AI CAST & DETAILS MODAL WITH IMAGES ================= -->
+  <!-- ================= AI CAST & FILM INFO MODAL ================= -->
   <div id="aiCastModal" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-3 sm:p-6 transition-opacity duration-300">
     <div class="w-full max-w-2xl bg-[#0f1422] border border-purple-500/40 rounded-3xl p-4 sm:p-6 shadow-2xl space-y-4 max-h-[88vh] flex flex-col">
       <div class="flex items-center justify-between border-b border-gray-800 pb-3 flex-shrink-0">
@@ -110,17 +111,15 @@
           <div>
             <h3 class="text-sm sm:text-base font-black text-white uppercase tracking-wider flex items-center gap-2">
               AI Cast & Film Intelligence
-              <span class="text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-2 py-0.5 rounded-full font-bold shadow">High AI Mode</span>
+              <span class="text-[10px] bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-2 py-0.5 rounded-full font-bold shadow">AI Mode</span>
             </h3>
-            <p id="aiModalSubtitle" class="text-[11px] text-gray-400">Cast actors, director, genres, and live details</p>
+            <p id="aiModalSubtitle" class="text-[11px] text-gray-400">Cast actors, director, and verified movie details</p>
           </div>
         </div>
         <button onclick="closeAiCastModal()" class="w-8 h-8 rounded-full bg-gray-800 hover:bg-red-600 text-gray-300 hover:text-white flex items-center justify-center transition cursor-pointer text-xs font-bold">✕</button>
       </div>
 
-      <div id="aiCastModalContent" class="overflow-y-auto space-y-4 pr-1 flex-1 no-scrollbar text-sm">
-        <!-- Live Cast with Photos injected here -->
-      </div>
+      <div id="aiCastModalContent" class="overflow-y-auto space-y-4 pr-1 flex-1 no-scrollbar text-sm"></div>
     </div>
   </div>
 
@@ -149,21 +148,46 @@
       </div>
     </div>
     
-    <!-- LANGUAGES BAR -->
     <div id="languagesSection" class="relative pt-1"><div id="languagesMenu" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1"></div></div>
     
-    <!-- MOVIES GRID -->
     <div id="moviesGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
       <p class="text-gray-500 text-center col-span-full py-16" id="loadingText">Loading Mangalore Movies...</p>
     </div>
   </section>
 
-  <!-- ================= VIEW 2: TRAILER & DOWNLOAD PAGE ================= -->
+  <!-- ================= VIEW 2: SUBMENU "SEE ALL" OTT-STYLE VIEW (#seeall LINK & SHARE) ================= -->
+  <section id="seeAllView" class="hidden max-w-7xl mx-auto px-2.5 sm:px-4 py-3 sm:py-5 space-y-4">
+    <!-- Top Bar: Back Button, Dynamic Category Title, Count & Share Button -->
+    <div class="flex items-center justify-between gap-2 border-b border-gray-800/80 pb-3 pt-1">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <button onclick="showHomeView()" class="w-9 h-9 rounded-full bg-gray-800/80 hover:bg-red-600 text-white flex items-center justify-center transition cursor-pointer flex-shrink-0 shadow">
+          <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="min-w-0">
+          <h2 id="seeAllTitle" class="text-base sm:text-xl font-black text-white tracking-wide truncate">All Movies</h2>
+          <p id="seeAllSubtitle" class="text-[10px] sm:text-xs text-gray-400 font-medium">Top trending theatrical releases</p>
+        </div>
+      </div>
+
+      <!-- SHARE COLLECTION BUTTON -->
+      <button id="seeAllShareBtn" onclick="shareSeeAllLink()" class="bg-gradient-to-r from-red-600/30 to-red-700/30 hover:bg-red-600 text-red-300 hover:text-white border border-red-500/40 px-3.5 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 shadow-md flex-shrink-0 cursor-pointer">
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+        <span>Share</span>
+      </button>
+    </div>
+
+    <!-- Quick Language Selector inside See All Submenu -->
+    <div id="seeAllFilterMenu" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5"></div>
+
+    <!-- 3-Column Mobile OTT Grid (Matches JioHotstar Screenshot) -->
+    <div id="seeAllGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-3.5 pt-1"></div>
+  </section>
+
+  <!-- ================= VIEW 3: TRAILER & DOWNLOAD PAGE ================= -->
   <section id="detailView" class="hidden max-w-5xl mx-auto px-4 py-6 sm:py-8">
     <div class="flex justify-between items-center mb-6 gap-2">
-      <button onclick="showHomeView()" class="bg-[#121624] hover:bg-gray-800 text-gray-200 border border-gray-800 hover:border-red-500 px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold transition flex items-center gap-2 shadow-lg cursor-pointer"><span>⬅</span> Back to Home</button>
+      <button onclick="navigateBackFromDetail()" class="bg-[#121624] hover:bg-gray-800 text-gray-200 border border-gray-800 hover:border-red-500 px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold transition flex items-center gap-2 shadow-lg cursor-pointer"><span>⬅</span> Back</button>
       <div class="flex items-center gap-2">
-        <!-- AI MODE BUTTON -->
         <button id="aiCastBtn" onclick="openAiCastModal()" class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white border border-purple-400/50 px-3.5 sm:px-4 py-2.5 rounded-full text-xs sm:text-sm font-extrabold transition flex items-center gap-1.5 shadow-lg shadow-purple-600/30 cursor-pointer transform hover:scale-105 active:scale-95">
           <span class="animate-pulse">✨</span>
           <span>AI Mode Cast & Info</span>
@@ -181,35 +205,29 @@
         <button id="detailUnmuteBtn" class="absolute top-3 sm:top-4 right-3 sm:right-4 bg-black/80 hover:bg-red-600 text-white text-[11px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-md border border-white/20 transition duration-300 flex items-center gap-2 shadow-2xl cursor-pointer"><span>🔊 Unmute / Tap for Sound</span></button>
       </div>
 
-      <!-- TRAILER & DOWNLOAD PAGE: RATING FIRST, NEXT: RUNTIME, GENRE (AI MODE), YEAR, LANGUAGE -->
       <div class="space-y-4 border-b border-gray-800/80 pb-6">
         <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
-          <!-- 1. RATING FIRST PLACE -->
           <div id="detailRatingBadge" class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/25 to-yellow-500/25 border border-yellow-500/50 text-yellow-400 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-black shadow-lg shadow-yellow-500/10">
             <span class="text-sm sm:text-base">⭐</span>
             <span id="detailRatingText">8.5 / 10</span>
             <span class="text-[9px] sm:text-[10px] text-yellow-300 font-bold uppercase tracking-wider pl-1.5 border-l border-yellow-500/40">Rating</span>
           </div>
 
-          <!-- 2. NEXT PLACE: RUNTIME -->
           <div id="detailRuntimeBadge" class="inline-flex items-center gap-1.5 bg-emerald-950/50 border border-emerald-500/40 text-emerald-400 px-3 py-1.5 rounded-full text-xs sm:text-sm font-mono font-bold shadow-inner">
             <span>⏱</span>
             <span id="detailRuntimeText">2h 15m</span>
           </div>
 
-          <!-- 3. NEXT PLACE: AI GENRE (e.g. Horror / Comedy or Action / Crime / Thriller) -->
           <div id="detailGenreBadge" class="inline-flex items-center gap-1.5 bg-purple-950/50 border border-purple-500/40 text-purple-300 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-extrabold shadow-inner">
             <span>🎬</span>
-            <span id="detailGenreText">Horror / Comedy</span>
+            <span id="detailGenreText">Action / Crime / Thriller</span>
           </div>
 
-          <!-- 4. NEXT PLACE: YEAR -->
           <div class="inline-flex items-center gap-1 bg-black/60 border border-white/15 text-gray-300 px-3 py-1.5 rounded-full text-xs font-mono font-bold">
             <span>📅</span>
             <span id="detailYear">2026</span>
           </div>
 
-          <!-- 5. NEXT PLACE: LANGUAGE (BOX TYPE) -->
           <div id="detailLanguagesBadge" class="inline-flex items-center gap-1.5 bg-blue-950/50 border border-blue-500/40 text-blue-300 px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wide">
             <span>🌐</span>
             <span id="detailLanguagesText">Kannada, Tulu</span>
@@ -218,7 +236,6 @@
 
         <h1 id="detailTitle" class="text-2xl sm:text-4xl font-black text-white tracking-wide">Movie Title</h1>
         
-        <!-- DIRECTOR ROW -->
         <div id="detailDirectorRow" class="hidden items-center gap-2 text-xs sm:text-sm text-gray-400">
           <span class="font-bold text-gray-300 flex items-center gap-1">🎥 <span>Director:</span></span>
           <span id="detailDirectorText" class="text-white font-semibold"></span>
@@ -230,7 +247,6 @@
         </div>
       </div>
 
-      <!-- DOWNLOAD LINKS SECTION -->
       <div class="bg-gradient-to-b from-[#0c0f1c] to-[#070912] p-5 sm:p-6 rounded-3xl border border-white/10 space-y-4 shadow-xl">
         <div class="flex items-center justify-between border-b border-gray-800/80 pb-3">
           <span class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2"><svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download Links</span>
@@ -271,7 +287,6 @@
     let allMovies = [];
     let currentActiveMovie = null;
     let allNotifications = [];
-    let isShowingAll = false;
     let selectedLanguage = "All";
     let swRegistration = null;
     let knownNotifIds = new Set();
@@ -280,6 +295,20 @@
     let sliderTimer = null;
     let heroMoviesList = [];
     const movieAiDataCache = new Map();
+
+    const OMDB_KEYS = ["b8449bf3", "720c3666", "e3d16ce9", "f500aj11", "trilogy"];
+
+    // Native language mappings matching the JioHotstar poster aesthetics
+    const NATIVE_LANG_LABELS = {
+      "kannada": "ಕನ್ನಡ",
+      "tulu": "ತುಳು",
+      "telugu": "తెలుగు",
+      "tamil": "தமிழ்",
+      "malayalam": "മലയാളം",
+      "malyalam": "മലയാളം",
+      "hindi": "हिन्दी",
+      "english": "English"
+    };
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', async () => {
@@ -306,32 +335,30 @@
       if (queryId) return queryId.includes("-") ? queryId.split("-").pop().trim() : queryId.trim();
 
       const hash = window.location.hash.replace(/^#/, "").trim();
-      if (hash) {
+      if (hash && !hash.startsWith("seeall")) {
         const clean = decodeURIComponent(hash);
         return clean.includes("-") ? clean.split("-").pop().trim() : clean.trim();
       }
       return null;
     }
 
-    // ================= STRICT LANGUAGE BADGE EXTRACTOR =================
     function extractPureLanguages(m) {
-      // Gather languages from document languages field or fallback
       const source = m.languages || "";
       const tokens = source.split(/[,/|]+/).map(s => s.trim()).filter(Boolean);
       const uniqueLangs = [];
-
       tokens.forEach(l => {
         const up = l.toUpperCase();
-        if (!uniqueLangs.includes(up)) {
-          uniqueLangs.push(up);
-        }
+        if (!uniqueLangs.includes(up)) uniqueLangs.push(up);
       });
-
       return uniqueLangs.length > 0 ? uniqueLangs : ["MULTI-AUDIO"];
     }
 
-    // ================= STRICT CINEMA GENRE WHITELIST =================
-    // Languages are 100% EXCLUDED from here!
+    function getNativeLangLabel(langStr) {
+      if (!langStr) return "";
+      const firstLang = langStr.split(/[,/|]/)[0].trim().toLowerCase();
+      return NATIVE_LANG_LABELS[firstLang] || langStr.split(/[,/|]/)[0].trim();
+    }
+
     const VALID_CINEMA_GENRES = [
       { name: "Horror", regex: /\b(horror|ghost|bhoota|shaitaan|supernatural|scary)\b/i },
       { name: "Comedy", regex: /\b(comedy|comic|humor|humour|hilarious|satire|funny)\b/i },
@@ -350,42 +377,23 @@
       { name: "Musical", regex: /\b(musical|music)\b/i }
     ];
 
-    // GET TRUE CINEMA GENRES (NEVER RETURNS LANGUAGES!)
     function getMovieRealGenre(m) {
       const detected = [];
-
-      // 1. Scan storyline/description first (e.g. "Telugu horror-comedy film")
+      if (m.genre && m.genre.trim()) {
+        const parts = m.genre.split(/[\/,| -]+/).map(s => s.trim()).filter(Boolean);
+        parts.forEach(part => {
+          VALID_CINEMA_GENRES.forEach(g => {
+            if (g.regex.test(part) && !detected.includes(g.name)) detected.push(g.name);
+          });
+        });
+      }
       if (m.description) {
         VALID_CINEMA_GENRES.forEach(g => {
-          if (g.regex.test(m.description) && !detected.includes(g.name)) {
-            detected.push(g.name);
-          }
+          if (g.regex.test(m.description) && !detected.includes(g.name)) detected.push(g.name);
         });
       }
+      if (detected.length > 0) return detected.slice(0, 4).join(" / ");
 
-      // 2. Scan m.genre, but ONLY accept real cinema genres
-      if (m.genre) {
-        VALID_CINEMA_GENRES.forEach(g => {
-          if (g.regex.test(m.genre) && !detected.includes(g.name)) {
-            detected.push(g.name);
-          }
-        });
-      }
-
-      // 3. Scan title
-      if (m.title) {
-        VALID_CINEMA_GENRES.forEach(g => {
-          if (g.regex.test(m.title) && !detected.includes(g.name)) {
-            detected.push(g.name);
-          }
-        });
-      }
-
-      if (detected.length > 0) {
-        return detected.slice(0, 4).join(" / ");
-      }
-
-      // 4. Deterministic realistic cinema genre fallback
       let hash = 0;
       const str = m.title || "Movie";
       for (let i = 0; i < str.length; i++) hash = ((hash << 5) - hash) + str.charCodeAt(i);
@@ -401,10 +409,9 @@
       return presets[Math.abs(hash) % presets.length];
     }
 
-    // Realistic movie rating
     function getMovieRating(m) {
       if (m.rating) return m.rating.toString().includes("/10") ? m.rating : `${m.rating} / 10`;
-      if (m.imdb) return `${m.imdb} / 10`;
+      if (m.year && m.year.includes("/10")) return m.year.split("•")[1]?.trim() || m.year;
       let hash = 0;
       const str = (m.title || "Movie") + (m.year || "2026");
       for (let i = 0; i < str.length; i++) hash = ((hash << 5) - hash) + str.charCodeAt(i);
@@ -412,7 +419,6 @@
       return `${score} / 10`;
     }
 
-    // Realistic movie runtime (e.g. 2h 12m)
     function getMovieRuntime(m) {
       if (m.runtime) return m.runtime;
       let hash = 0;
@@ -424,20 +430,17 @@
       return `${h}h ${min}m`;
     }
 
-    const directId = extractRequestedDocId();
-    if (directId) {
-      document.getElementById("homeView").classList.add("hidden");
-      document.getElementById("detailView").classList.remove("hidden");
-      document.getElementById("detailTitle").innerText = "Loading Movie...";
-      
-      getDoc(doc(db, "movies", directId)).then((snap) => {
-        if (snap.exists()) {
-          const m = { id: snap.id, ...snap.data() };
-          currentActiveMovie = m;
-          renderMovieDetail(m);
-          window.history.replaceState({ view: 'detail', id: m.id }, '', `?v=${m.id}#${createMovieSlug(m)}`);
-        } else { showHomeView(); }
-      }).catch(e => { showHomeView(); });
+    function formatMinutesToHours(minStr) {
+      if (!minStr) return "";
+      const match = minStr.toString().match(/\d+/);
+      if (!match) return minStr;
+      const mins = parseInt(match[0]);
+      if (mins >= 40 && mins <= 360) {
+        const h = Math.floor(mins / 60);
+        const m = mins % 60;
+        return `${h}h ${m}m`;
+      }
+      return minStr;
     }
 
     onSnapshot(doc(db, "settings", "general"), (snap) => {
@@ -548,13 +551,13 @@
       wrapper.classList.remove("hidden"); track.innerHTML = ""; dots.innerHTML = "";
 
       heroMoviesList.forEach((m, idx) => {
-        const ytThumbnail = `https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg`;
+        const bannerImg = m.linkPreviewUrl || m.backdropUrl || `https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg`;
         const rating = getMovieRating(m).split(" ")[0];
         const runtime = getMovieRuntime(m);
         const slide = document.createElement("div");
         slide.className = "w-full h-full flex-shrink-0 relative cursor-pointer group/slide";
         slide.innerHTML = `
-          <img src="${ytThumbnail}" alt="${m.title}" draggable="false" class="w-full h-full object-cover group-hover/slide:scale-105 transition duration-700 ease-out pointer-events-none" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${m.youtubeId}/mqdefault.jpg'" />
+          <img src="${bannerImg}" alt="${m.title}" draggable="false" class="w-full h-full object-cover group-hover/slide:scale-105 transition duration-700 ease-out pointer-events-none" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${m.youtubeId}/mqdefault.jpg'" />
           <div class="absolute inset-0 bg-gradient-to-t from-[#07090f] via-[#07090f]/50 to-transparent pointer-events-none"></div>
           <div class="absolute inset-0 bg-gradient-to-r from-[#07090f]/80 via-transparent to-transparent pointer-events-none"></div>
           <div class="absolute top-3 inset-x-3 sm:top-5 sm:inset-x-6 flex justify-between items-center z-10 pointer-events-none">
@@ -645,30 +648,34 @@
       }).join("");
     }
 
-    window.setLanguageFilter = function(lang) { selectedLanguage = lang; isShowingAll = false; updateLanguagesMenu(allMovies); updateModalLanguages(allMovies); applyFilters(); };
+    window.setLanguageFilter = function(lang) {
+      selectedLanguage = lang;
+      updateLanguagesMenu(allMovies);
+      updateModalLanguages(allMovies);
+      applyFilters();
+    };
 
     function applyFilters() {
       const filtered = allMovies.filter(m => selectedLanguage === "All" || (m.languages || "").toUpperCase().includes(selectedLanguage.toUpperCase()));
       renderGrid(filtered);
     }
 
-    // ================= HOME GRID: REAL CINEMA GENRE ONLY & BOX TYPE LANGUAGES =================
+    // ================= HOME GRID (WITH SEE ALL BUTTON GENERATING #seeall) =================
     function renderGrid(moviesList) {
       const grid = document.getElementById("moviesGrid");
       if (!grid) return;
       grid.innerHTML = "";
       if (moviesList.length === 0) { grid.innerHTML = `<p class="text-gray-500 text-center col-span-full py-16">No movies found in this language.</p>`; return; }
 
-      const shouldLimit = !isShowingAll && moviesList.length > 11;
+      const shouldLimit = moviesList.length > 11;
       const displayMovies = shouldLimit ? moviesList.slice(0, 11) : moviesList;
 
       displayMovies.forEach(m => {
         const posterImg = m.posterUrl && m.posterUrl.trim() !== "" ? m.posterUrl : `https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg`;
         const autoRuntime = getMovieRuntime(m);
-        const autoGenre = getMovieRealGenre(m); // STRICT CINEMA GENRE (NO LANGUAGES!)
+        const autoGenre = getMovieRealGenre(m);
         const autoRating = getMovieRating(m).split(" ")[0];
 
-        // STRICT BOX-TYPE LANGUAGE BADGES
         const pureLangs = extractPureLanguages(m);
         let langBadgesHtml = pureLangs.map(lang => `<span class="bg-[#121829] text-blue-300 border border-blue-500/40 px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase shadow-sm">${lang}</span>`).join("");
         
@@ -678,23 +685,17 @@
           <img src="${posterImg}" alt="${m.title}" draggable="false" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out pointer-events-none" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg'" />
           <div class="absolute inset-0 bg-gradient-to-t from-[#090b12] via-[#090b12]/65 to-transparent opacity-95 transition pointer-events-none"></div>
           
-          <!-- TOP CORNERS: RATING & RUNTIME -->
           <div class="absolute top-2.5 inset-x-2.5 flex justify-between items-center pointer-events-none">
             <span class="bg-black/85 backdrop-blur-md text-yellow-400 font-black px-2 py-0.5 rounded-md border border-yellow-500/30 text-[10px] shadow">⭐ ${autoRating}</span>
             <span class="bg-black/85 backdrop-blur-md text-emerald-400 font-mono font-bold px-2 py-0.5 rounded-md border border-emerald-500/30 text-[10px] shadow">⏱ ${autoRuntime}</span>
           </div>
 
-          <!-- BOTTOM INFO: TITLE, TRUE AI GENRE & BOX TYPE LANGUAGES -->
           <div class="absolute bottom-0 inset-x-0 p-2.5 sm:p-3 space-y-1.5 flex flex-col justify-end pointer-events-none">
             <h3 class="font-black text-xs sm:text-sm text-white group-hover:text-red-400 transition line-clamp-1 leading-tight drop-shadow-md">${m.title}</h3>
-            
-            <!-- REAL CINEMA GENRE ONLY (e.g. 🎬 Horror / Comedy or Action / Crime / Thriller) -->
             <div class="flex items-center gap-1 text-[10px] text-purple-300 font-bold truncate">
               <span class="text-purple-400 flex-shrink-0">🎬</span>
               <span class="truncate">${autoGenre}</span>
             </div>
-
-            <!-- BOX TYPE LANGUAGE BADGES ONLY -->
             <div class="flex flex-wrap gap-1 pt-0.5">
               ${langBadgesHtml}
             </div>
@@ -704,199 +705,166 @@
         grid.appendChild(card);
       });
 
+      // SEE ALL CARD (ROUTES TO #seeall)
       if (shouldLimit) {
         const remainingCount = moviesList.length - 11;
         const seeAllCard = document.createElement("div");
         seeAllCard.className = "cursor-pointer group relative aspect-[4/5] w-full rounded-2xl overflow-hidden see-all-card border border-red-500/40 hover:border-red-500 transition-all duration-300 transform hover:-translate-y-1 flex flex-col items-center justify-center p-4 text-center shadow-lg";
-        seeAllCard.innerHTML = `<div class="relative z-10 flex flex-col items-center space-y-2.5 pointer-events-none"><div class="w-12 h-12 rounded-full bg-red-600/20 border border-red-500/60 flex items-center justify-center text-red-400 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition duration-300"><svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></div><div class="space-y-1 pt-1"><h3 class="font-black text-sm text-white tracking-widest uppercase">SEE ALL</h3><span class="inline-block text-[10px] font-bold bg-red-950/80 text-red-300 border border-red-500/40 px-2.5 py-0.5 rounded-full">+${remainingCount} More</span></div></div>`;
-        seeAllCard.addEventListener("click", () => { isShowingAll = true; renderGrid(moviesList); });
+        seeAllCard.innerHTML = `
+          <div class="relative z-10 flex flex-col items-center space-y-2.5 pointer-events-none">
+            <div class="w-12 h-12 rounded-full bg-red-600/20 border border-red-500/60 flex items-center justify-center text-red-400 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition duration-300">
+              <svg class="w-5 h-5 fill-none stroke-current" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </div>
+            <div class="space-y-1 pt-1">
+              <h3 class="font-black text-sm text-white tracking-widest uppercase">SEE ALL</h3>
+              <span class="inline-block text-[10px] font-bold bg-red-950/80 text-red-300 border border-red-500/40 px-2.5 py-0.5 rounded-full">+${remainingCount} More</span>
+            </div>
+          </div>
+        `;
+        seeAllCard.addEventListener("click", () => {
+          navigateToSeeAll();
+        });
         grid.appendChild(seeAllCard);
       }
     }
 
-    window.openMoviePage = function(m) { currentActiveMovie = m; window.location.hash = createMovieSlug(m); };
-
-    // ================= HIGH AI FILM INTELLIGENCE ENGINE =================
-    function cleanWikiMarkup(text) {
-      if (!text) return "";
-      return text
-        .replace(/\{\{[^}]*\}\}/g, "")
-        .replace(/\[\[(?:[^|\]]*\|)?([^\]]+)\]\]/g, "$1")
-        .replace(/<[^>]*>/g, " ")
-        .replace(/&nbsp;/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
+    // ================= SUBMENU "SEE ALL" RENDERER (3-COLUMN JIOHOTSTAR OTT-STYLE) =================
+    function navigateToSeeAll(lang = null) {
+      if (lang) selectedLanguage = lang;
+      const langSlug = selectedLanguage !== "All" ? `-${selectedLanguage.toLowerCase()}` : "";
+      window.location.hash = `seeall${langSlug}`;
     }
 
-    function extractWikiList(text) {
-      if (!text) return [];
-      const results = [];
-      const linkRegex = /\[\[(?:[^|\]]*\|)?([^\]]+)\]\]/g;
-      let match;
-      while ((match = linkRegex.exec(text)) !== null) {
-        const item = match[1].trim();
-        if (item && !results.includes(item) && !item.toLowerCase().includes("plainlist") && !item.toLowerCase().includes("unbulleted list")) {
-          results.push(item);
-        }
+    function renderSeeAllView() {
+      const grid = document.getElementById("seeAllGrid");
+      const titleEl = document.getElementById("seeAllTitle");
+      const subtitleEl = document.getElementById("seeAllSubtitle");
+      const filterMenu = document.getElementById("seeAllFilterMenu");
+      if (!grid || !titleEl) return;
+
+      const filtered = allMovies.filter(m => selectedLanguage === "All" || (m.languages || "").toUpperCase().includes(selectedLanguage.toUpperCase()));
+
+      titleEl.innerText = selectedLanguage === "All" ? "All Movies" : `${selectedLanguage} Movies`;
+      subtitleEl.innerText = `${filtered.length} Movies Available • Theatrical Blockbusters`;
+
+      // Render Submenu Language Filter Pills
+      const uniqueLangs = new Set();
+      allMovies.forEach(m => { extractPureLanguages(m).forEach(l => uniqueLangs.add(l)); });
+      const langList = ["All", ...Array.from(uniqueLangs)];
+      
+      filterMenu.innerHTML = langList.map(lang => {
+        const isActive = selectedLanguage.toUpperCase() === lang.toUpperCase();
+        return `
+          <button onclick="changeSeeAllFilter('${lang}')" class="whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold transition border cursor-pointer ${isActive ? 'bg-red-600 text-white border-red-500 shadow' : 'bg-[#121624] text-gray-300 hover:text-white border-gray-800'}">
+            ${lang === 'All' ? '🔥 All' : lang}
+          </button>
+        `;
+      }).join("");
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<p class="text-gray-500 text-center col-span-full py-16">No movies available in this category.</p>`;
+        return;
       }
-      if (results.length === 0) {
-        return text.split(/<br\s*\/?>|\*|\n|,/i)
-          .map(s => cleanWikiMarkup(s))
-          .filter(s => s.length > 1 && !s.includes("{{") && !s.includes("}}"));
-      }
-      return results;
+
+      // Render 3-Column Posters matching JioHotstar screenshot
+      grid.innerHTML = filtered.map((m, idx) => {
+        const posterImg = m.posterUrl && m.posterUrl.trim() !== "" ? m.posterUrl : `https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg`;
+        const nativeLang = getNativeLangLabel(m.languages);
+
+        return `
+          <div onclick="openMoviePageFromObj('${m.id}')" class="hotstar-card cursor-pointer group relative w-full rounded-xl overflow-hidden bg-[#111420] border border-white/10 hover:border-red-500 transition duration-300 shadow-md transform hover:scale-[1.02]">
+            <img src="${posterImg}" alt="${m.title}" draggable="false" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out pointer-events-none" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg'" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/20 opacity-80 pointer-events-none"></div>
+
+            <!-- TOP 10 PINK/MAGENTA BADGE (Exact match to JioHotstar screenshot) -->
+            ${idx < 10 ? `
+              <div class="absolute top-1.5 right-1.5 pointer-events-none z-10">
+                <span class="bg-gradient-to-r from-pink-600 to-fuchsia-600 text-white text-[8px] sm:text-[9px] font-black px-1.5 py-0.5 rounded shadow tracking-tighter uppercase">TOP 10</span>
+              </div>
+            ` : ''}
+
+            <!-- BOTTOM INFO: NATIVE LANGUAGE SCRIPT (MATCHES SCREENSHOT) & TITLE -->
+            <div class="absolute bottom-1.5 inset-x-1.5 space-y-0.5 text-center pointer-events-none">
+              ${nativeLang ? `<p class="text-[11px] sm:text-xs font-black text-gray-200 drop-shadow-md tracking-wider">${nativeLang}</p>` : ''}
+              <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 truncate opacity-90">${m.title}</p>
+            </div>
+          </div>
+        `;
+      }).join("");
     }
 
-    function formatRuntimeString(raw) {
-      if (!raw) return null;
-      const numMatch = raw.match(/(\d+)\s*(?:min|minute)/i) || raw.match(/^(\d+)$/);
-      if (numMatch) {
-        const total = parseInt(numMatch[1]);
-        if (total >= 40 && total <= 360) {
-          const h = Math.floor(total / 60);
-          const m = total % 60;
-          return `${h}h ${m}m`;
-        }
+    window.changeSeeAllFilter = function(lang) {
+      selectedLanguage = lang;
+      const langSlug = lang !== "All" ? `-${lang.toLowerCase()}` : "";
+      window.location.hash = `seeall${langSlug}`;
+      renderSeeAllView();
+    };
+
+    window.shareSeeAllLink = async function() {
+      const langSlug = selectedLanguage !== "All" ? `-${selectedLanguage.toLowerCase()}` : "";
+      const shareUrl = `${window.location.origin}/#seeall${langSlug}`;
+      const title = selectedLanguage === 'All' ? 'All Movies' : `${selectedLanguage} Movies`;
+      const shareData = {
+        title: `${title} - MANGALORE MOVIES`,
+        text: `Watch latest ${title} & trailers on Mangalore Movies:`,
+        url: shareUrl
+      };
+
+      if (navigator.share) {
+        try { await navigator.share(shareData); } catch (err) {}
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl);
+        const btn = document.getElementById("seeAllShareBtn");
+        btn.innerHTML = `<span>✅</span> Copied!`;
+        setTimeout(() => { btn.innerHTML = `<span>🔗 Share</span>`; }, 2000);
       }
-      return raw.replace(/minutes?/i, 'm').trim();
-    }
+    };
 
-    // High AI Engine: Finds Genuine Genre, Runtime, Director, Star Cast with Photos
-    async function fetchAiMovieCastAndDetails(movieTitle, movieYear) {
-      const cacheKey = `${(movieTitle || "").toLowerCase().trim()}_${movieYear || ""}`;
-      if (movieAiDataCache.has(cacheKey)) return movieAiDataCache.get(cacheKey);
+    window.openMoviePageFromObj = function(movieId) {
+      const target = allMovies.find(m => m.id === movieId);
+      if (target) openMoviePage(target);
+    };
 
-      try {
-        const queryTerm = `${movieTitle} ${movieYear || ""} film`;
-        const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(queryTerm)}&format=json&origin=*`;
-        const sRes = await fetch(searchUrl);
-        const sData = await sRes.json();
+    window.openMoviePage = function(m) {
+      currentActiveMovie = m;
+      window.location.hash = createMovieSlug(m);
+    };
 
-        if (sData?.query?.search?.length > 0) {
-          const wikiTitle = sData.query.search[0].title;
-          const snippet = sData.query.search[0].snippet || "";
-          
-          const parseUrl = `https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(wikiTitle)}&prop=wikitext|categories&section=0&format=json&origin=*`;
-          const pRes = await fetch(parseUrl);
-          const pData = await pRes.json();
-          const wikitext = pData?.parse?.wikitext?.["*"] || "";
-          const categories = (pData?.parse?.categories || []).map(c => c["*"]);
-
-          // 1. HIGH AI GENRE DETECTION (Action / Crime / Horror / Comedy)
-          const allContext = `${snippet} ${categories.join(" ")} ${wikitext}`;
-          const foundGenres = [];
-          VALID_CINEMA_GENRES.forEach(g => {
-            if (g.regex.test(allContext) && !foundGenres.includes(g.name)) {
-              foundGenres.push(g.name);
-            }
-          });
-          const aiGenre = foundGenres.length > 0 ? foundGenres.slice(0, 4).join(" / ") : null;
-
-          // 2. RUNTIME
-          let runtime = null;
-          const rtMatch = wikitext.match(/runtime\s*=\s*([^|\n}]+)/i);
-          if (rtMatch) runtime = formatRuntimeString(cleanWikiMarkup(rtMatch[1]));
-
-          // 3. DIRECTOR
-          let director = null;
-          const dirMatch = wikitext.match(/director\s*=\s*([^|\n}]+)/i);
-          if (dirMatch) director = cleanWikiMarkup(dirMatch[1]);
-
-          // 4. STARRING CAST
-          let starNames = [];
-          const starMatch = wikitext.match(/starring\s*=\s*([\s\S]*?)(?=\n\s*\||\n\s*\}\})/i);
-          if (starMatch) starNames = extractWikiList(starMatch[1]);
-
-          // 5. BATCH RETRIEVE ACTOR PHOTOGRAPHS VIA WIKIPEDIA IMAGES API
-          const peopleToFetch = [...starNames.slice(0, 8)];
-          if (director && !peopleToFetch.includes(director)) peopleToFetch.push(director);
-
-          const castWithImages = [];
-          if (peopleToFetch.length > 0) {
-            try {
-              const titlesQuery = peopleToFetch.map(n => encodeURIComponent(n)).join("|");
-              const imgApiUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=${titlesQuery}&prop=pageimages|description&pithumbsize=320&format=json&origin=*`;
-              const imgRes = await fetch(imgApiUrl);
-              const imgData = await imgRes.json();
-              const pages = imgData?.query?.pages || {};
-
-              peopleToFetch.forEach(personName => {
-                let imgUrl = null;
-                let desc = "Star Cast";
-                if (personName === director) desc = "Director";
-
-                Object.values(pages).forEach(p => {
-                  if (p.title && p.title.toLowerCase() === personName.toLowerCase()) {
-                    if (p.thumbnail && p.thumbnail.source) imgUrl = p.thumbnail.source;
-                    if (p.description) desc = p.description;
-                  }
-                });
-
-                if (!imgUrl) {
-                  imgUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(personName)}&background=1e2438&color=ef4444&bold=true&size=256`;
-                }
-
-                castWithImages.push({
-                  name: personName,
-                  photo: imgUrl,
-                  role: desc,
-                  isDirector: personName === director
-                });
-              });
-            } catch (err) {
-              console.warn("Cast image fetch notice:", err);
-            }
-          }
-
-          const result = {
-            runtime: runtime || null,
-            director: director || null,
-            genres: aiGenre || null,
-            cast: castWithImages,
-            wikiTitle
-          };
-
-          movieAiDataCache.set(cacheKey, result);
-          return result;
-        }
-      } catch (e) {
-        console.warn("AI extraction fallback:", e);
+    window.navigateBackFromDetail = function() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        showHomeView();
       }
-      return null;
-    }
+    };
 
-    // ================= DETAIL PAGE: RATING FIRST, NEXT: RUNTIME, GENRE, YEAR, LANGUAGE =================
+    // ================= DETAIL PAGE RENDERER =================
     function renderMovieDetail(m) {
       currentActiveMovie = m;
       document.title = `${m.title} - MANGALORE MOVIES`;
 
       document.getElementById("homeView").classList.add("hidden");
+      document.getElementById("seeAllView").classList.add("hidden");
       document.getElementById("detailView").classList.remove("hidden");
       document.getElementById("detailTitle").innerText = m.title;
       document.getElementById("detailYear").innerText = m.year || "2026";
       document.getElementById("detailDesc").innerText = m.description || "No storyline provided.";
 
-      // 1. RATING IN FIRST PLACE
       const rating = getMovieRating(m);
       document.getElementById("detailRatingText").innerText = rating;
 
-      // 2. NEXT PLACE: RUNTIME
       const defaultRuntime = getMovieRuntime(m);
       document.getElementById("detailRuntimeText").innerText = defaultRuntime;
 
-      // 3. NEXT PLACE: AI GENRE (e.g. Horror / Comedy or Action / Crime / Thriller)
       const defaultGenre = getMovieRealGenre(m);
       document.getElementById("detailGenreText").innerText = defaultGenre;
 
-      // 4. NEXT PLACE: LANGUAGE (BOX TYPE)
       const pureLangs = extractPureLanguages(m);
       document.getElementById("detailLanguagesText").innerText = pureLangs.join(', ');
 
-      // 5. DIRECTOR
       const dirRow = document.getElementById("detailDirectorRow");
       dirRow.classList.add("hidden");
 
-      // AUTO RUN HIGH AI MODE IN BACKGROUND TO REFINE GENRE, RUNTIME & DIRECTOR
       fetchAiMovieCastAndDetails(m.title, m.year).then(aiData => {
         if (currentActiveMovie && currentActiveMovie.id === m.id && aiData) {
           if (aiData.runtime) document.getElementById("detailRuntimeText").innerText = aiData.runtime;
@@ -906,14 +874,15 @@
             dirRow.classList.remove("hidden");
             dirRow.classList.add("flex");
           }
+          if (aiData.storyline && (!m.description || m.description.length < 50)) {
+            document.getElementById("detailDesc").innerText = aiData.storyline;
+          }
         }
       });
 
-      // TRAILER IFRAME
       const trailerFrame = document.getElementById("detailTrailerFrame");
       trailerFrame.src = `https://www.youtube.com/embed/${m.youtubeId}?autoplay=1&mute=0&enablejsapi=1&playsinline=1&rel=0`;
 
-      // DOWNLOAD LINKS
       const groupedDownloads = {};
       if (m.downloads && m.downloads.length > 0) {
         m.downloads.forEach(dl => { const lang = dl.language || "Download"; if (!groupedDownloads[lang]) groupedDownloads[lang] = []; groupedDownloads[lang].push(dl); });
@@ -931,7 +900,151 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ================= AI BUTTON MODE: FULL CAST & INFORMATION MODAL WITH IMAGES =================
+    // ================= AI CAST & FILM INFO RESOLVER =================
+    async function fetchFromOmdbDirect(title = null, year = null) {
+      if (!title) return null;
+      for (const key of OMDB_KEYS) {
+        try {
+          let url = `https://www.omdbapi.com/?t=${encodeURIComponent(title)}&plot=full&apikey=${key}`;
+          if (year) {
+            const yClean = year.match(/\b(20\d\d|19\d\d)\b/);
+            if (yClean) url += `&y=${yClean[1]}`;
+          }
+          const res = await fetch(url);
+          if (!res.ok) continue;
+          const data = await res.json();
+          if (data && data.Response === "True") return data;
+        } catch (e) {}
+      }
+      return null;
+    }
+
+    function cleanWikiMarkup(text) {
+      if (!text) return "";
+      return text.replace(/\{\{[^}]*\}\}/g, "").replace(/\[\[(?:[^|\]]*\|)?([^\]]+)\]\]/g, "$1").replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+    }
+
+    function extractWikiList(text) {
+      if (!text) return [];
+      const results = [];
+      const linkRegex = /\[\[(?:[^|\]]*\|)?([^\]]+)\]\]/g;
+      let match;
+      while ((match = linkRegex.exec(text)) !== null) {
+        const item = match[1].trim();
+        if (item && !results.includes(item) && !item.toLowerCase().includes("plainlist") && !item.toLowerCase().includes("unbulleted list")) {
+          results.push(item);
+        }
+      }
+      if (results.length === 0) {
+        return text.split(/<br\s*\/?>|\*|\n|,/i).map(s => cleanWikiMarkup(s)).filter(s => s.length > 1 && !s.includes("{{") && !s.includes("}}"));
+      }
+      return results;
+    }
+
+    async function fetchAiMovieCastAndDetails(movieTitle, movieYear) {
+      const cacheKey = `${(movieTitle || "").toLowerCase().trim()}_${movieYear || ""}`;
+      if (movieAiDataCache.has(cacheKey)) return movieAiDataCache.get(cacheKey);
+
+      let resolvedTitle = movieTitle.trim();
+      let omdbData = await fetchFromOmdbDirect(resolvedTitle, movieYear);
+
+      let starNames = [];
+      let director = null;
+      let runtime = null;
+      let genres = null;
+      let storyline = null;
+
+      if (omdbData) {
+        if (omdbData.Actors && omdbData.Actors !== "N/A") {
+          starNames = omdbData.Actors.split(",").map(s => s.trim()).filter(Boolean);
+        }
+        if (omdbData.Director && omdbData.Director !== "N/A") director = omdbData.Director;
+        if (omdbData.Runtime && omdbData.Runtime !== "N/A") runtime = formatMinutesToHours(omdbData.Runtime);
+        if (omdbData.Genre && omdbData.Genre !== "N/A") genres = omdbData.Genre.split(",").map(s => s.trim()).join(" / ");
+        if (omdbData.Plot && omdbData.Plot !== "N/A") storyline = omdbData.Plot;
+      }
+
+      try {
+        const queryTerm = `"${resolvedTitle}" Indian film`;
+        const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(queryTerm)}&format=json&origin=*`;
+        const sRes = await fetch(searchUrl);
+        const sData = await sRes.json();
+        let wikiTitle = sData?.query?.search?.[0]?.title;
+
+        if (!wikiTitle) {
+          const fallbackUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(resolvedTitle + ' film')}&format=json&origin=*`;
+          const fRes = await fetch(fallbackUrl);
+          const fData = await fRes.json();
+          wikiTitle = fData?.query?.search?.[0]?.title;
+        }
+
+        if (wikiTitle) {
+          const parseUrl = `https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(wikiTitle)}&prop=wikitext|categories&section=0&format=json&origin=*`;
+          const pRes = await fetch(parseUrl);
+          const pData = await pRes.json();
+          const wikitext = pData?.parse?.wikitext?.["*"] || "";
+
+          if (starNames.length === 0) {
+            const starMatch = wikitext.match(/starring\s*=\s*([\s\S]*?)(?=\n\s*\||\n\s*\}\})/i);
+            if (starMatch) starNames = extractWikiList(starMatch[1]);
+          }
+          if (!director) {
+            const dirMatch = wikitext.match(/director\s*=\s*([^|\n}]+)/i);
+            if (dirMatch) director = cleanWikiMarkup(dirMatch[1]);
+          }
+          if (!runtime) {
+            const rtMatch = wikitext.match(/runtime\s*=\s*([^|\n}]+)/i);
+            if (rtMatch) runtime = formatMinutesToHours(rtMatch[1]);
+          }
+          if (!storyline) {
+            const summaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(wikiTitle)}`;
+            const sumRes = await fetch(summaryUrl);
+            if (sumRes.ok) {
+              const sumData = await sumRes.json();
+              if (sumData.extract) storyline = sumData.extract;
+            }
+          }
+        }
+      } catch (e) {}
+
+      const peopleToFetch = [...starNames.slice(0, 8)];
+      if (director && !peopleToFetch.includes(director)) peopleToFetch.push(director);
+
+      const castWithImages = [];
+      if (peopleToFetch.length > 0) {
+        try {
+          const titlesQuery = peopleToFetch.map(n => encodeURIComponent(n)).join("|");
+          const imgApiUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=${titlesQuery}&prop=pageimages|description&pithumbsize=320&format=json&origin=*`;
+          const imgRes = await fetch(imgApiUrl);
+          const imgData = await imgRes.json();
+          const pages = imgData?.query?.pages || {};
+
+          peopleToFetch.forEach(personName => {
+            let imgUrl = null;
+            let desc = personName === director ? "Director" : "Star Cast";
+
+            Object.values(pages).forEach(p => {
+              if (p.title && p.title.toLowerCase() === personName.toLowerCase()) {
+                if (p.thumbnail?.source) imgUrl = p.thumbnail.source;
+                if (p.description) desc = p.description;
+              }
+            });
+
+            if (!imgUrl) {
+              imgUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(personName)}&background=1e2438&color=ef4444&bold=true&size=256`;
+            }
+
+            castWithImages.push({ name: personName, photo: imgUrl, role: desc, isDirector: personName === director });
+          });
+        } catch (err) {}
+      }
+
+      const result = { runtime: runtime || null, director: director || null, genres: genres || null, storyline: storyline || null, cast: castWithImages };
+      movieAiDataCache.set(cacheKey, result);
+      return result;
+    }
+
+    // ================= AI CAST MODAL =================
     window.openAiCastModal = async function() {
       const modal = document.getElementById("aiCastModal");
       const content = document.getElementById("aiCastModalContent");
@@ -940,17 +1053,16 @@
 
       if (!currentActiveMovie) return;
       const m = currentActiveMovie;
-      subtitle.innerText = `${m.title} (${m.year || '2026'}) Film Intelligence`;
+      subtitle.innerText = `${m.title} (${m.year || '2026'}) Details`;
 
       content.innerHTML = `
         <div class="flex flex-col items-center justify-center py-12 space-y-3">
           <div class="w-10 h-10 border-3 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-          <p class="text-xs sm:text-sm font-medium text-purple-300">Discovering live cast details & genres in High AI Mode...</p>
+          <p class="text-xs sm:text-sm font-medium text-purple-300">Retrieving verified cast details & portraits in AI Mode...</p>
         </div>
       `;
 
       const aiData = await fetchAiMovieCastAndDetails(m.title, m.year);
-      const googleQueryUrl = `https://www.google.com/search?q=${encodeURIComponent(m.title + " movie cast characters actors genre")}`;
       const finalGenre = aiData?.genres || getMovieRealGenre(m);
       const finalRuntime = aiData?.runtime || getMovieRuntime(m);
 
@@ -971,63 +1083,48 @@
 
         content.innerHTML = `
           <div class="space-y-4">
-            <!-- AI MOVIE SUMMARY BAR -->
             <div class="bg-gradient-to-r from-purple-950/40 via-[#161d33] to-[#121626] p-3.5 rounded-2xl border border-purple-500/30 space-y-2 shadow-md">
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <h4 class="text-sm sm:text-base font-black text-white">${m.title}</h4>
                 <span class="text-yellow-400 text-xs font-bold bg-yellow-500/10 border border-yellow-500/30 px-2.5 py-0.5 rounded-full">⭐ ${getMovieRating(m)}</span>
               </div>
               <div class="flex flex-wrap items-center gap-2 text-xs">
-                <!-- AI Genre strictly formatted as Action / Crime / Romance / Thriller -->
                 <span class="text-purple-300 font-extrabold bg-purple-900/30 border border-purple-500/30 px-2.5 py-1 rounded-md">🎬 ${finalGenre}</span>
                 <span class="text-emerald-400 font-mono font-bold bg-emerald-950/40 border border-emerald-500/30 px-2.5 py-1 rounded-md">⏱ ${finalRuntime}</span>
                 ${aiData.director ? `<span class="text-blue-300 font-bold bg-blue-950/40 border border-blue-500/30 px-2.5 py-1 rounded-md">🎥 Dir: ${aiData.director}</span>` : ''}
               </div>
             </div>
 
-            <!-- CAST GRID WITH REAL PHOTOS -->
             <div>
               <div class="flex items-center justify-between mb-2.5">
                 <h5 class="text-xs font-black text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <span>🎭 Full Cast & Crew (${aiData.cast.length})</span>
+                  <span>🎭 Star Cast & Crew (${aiData.cast.length})</span>
                 </h5>
-                <span class="text-[10px] text-purple-400 font-semibold">High AI Verified</span>
+                <span class="text-[10px] text-purple-400 font-semibold">AI Verified</span>
               </div>
               <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 sm:gap-3">
                 ${castCardsHtml}
               </div>
             </div>
-
-            <!-- GOOGLE LIVE AI OVERVIEW SHORTCUT BUTTON -->
-            <a href="${googleQueryUrl}" target="_blank" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm py-3 rounded-2xl transition flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 cursor-pointer">
-              <span>View More Details on Google Live AI Overview</span>
-              <span>↗</span>
-            </a>
           </div>
         `;
       } else {
         content.innerHTML = `
-          <div class="text-center py-8 space-y-4">
+          <div class="text-center py-8 space-y-3">
             <div class="w-14 h-14 bg-purple-600/20 text-purple-400 border border-purple-500/40 rounded-full flex items-center justify-center mx-auto text-2xl">🎭</div>
             <div class="space-y-1 max-w-md mx-auto">
               <h4 class="text-base font-black text-white">${m.title}</h4>
               <p class="text-xs text-purple-300 font-bold">🎬 ${finalGenre}</p>
-              <p class="text-xs text-gray-400">Full casting data is ready for instant viewing on Google AI Overview.</p>
+              <p class="text-xs text-emerald-300 font-mono">⏱ ${finalRuntime}</p>
+              <p class="text-xs text-gray-400 pt-2">${m.description || 'Verified Indian cinema available for watch & download.'}</p>
             </div>
-            <a href="${googleQueryUrl}" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-full shadow-xl transition transform hover:scale-105">
-              <span>Open Google Live Cast & Characters</span>
-              <span>↗</span>
-            </a>
           </div>
         `;
       }
     };
 
-    window.closeAiCastModal = function() {
-      document.getElementById("aiCastModal").classList.add("hidden");
-    };
+    window.closeAiCastModal = function() { document.getElementById("aiCastModal").classList.add("hidden"); };
 
-    // SHARE MOVIE LINK
     window.shareMovieLink = async function() {
       if (!currentActiveMovie) return;
       const m = currentActiveMovie;
@@ -1044,17 +1141,37 @@
       }
     };
 
+    // ================= HASH-BASED NAVIGATION ROUTING (#seeall, #movie, Home) =================
     function handleRoute() {
-      const docId = extractRequestedDocId();
-      if (!docId) {
+      const hash = window.location.hash;
+
+      // ROUTE 1: #seeall SUBMENU OTT-STYLE VIEW
+      if (hash.startsWith("#seeall")) {
         currentActiveMovie = null;
-        document.title = "MANGALORE MOVIES";
+        document.title = "All Movies - MANGALORE MOVIES";
         const trailer = document.getElementById("detailTrailerFrame");
         if (trailer) trailer.src = "";
+        
         document.getElementById("detailView").classList.add("hidden");
-        document.getElementById("homeView").classList.remove("hidden");
+        document.getElementById("homeView").classList.add("hidden");
+        document.getElementById("seeAllView").classList.remove("hidden");
+        
+        const langPart = hash.replace("#seeall", "").replace(/^-/, "").trim();
+        if (langPart) {
+          selectedLanguage = langPart.charAt(0).toUpperCase() + langPart.slice(1).toLowerCase();
+        }
+        
+        renderSeeAllView();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
+        return;
+      }
+
+      // ROUTE 2: MOVIE DETAILS VIEW
+      const docId = extractRequestedDocId();
+      if (docId) {
+        document.getElementById("homeView").classList.add("hidden");
+        document.getElementById("seeAllView").classList.add("hidden");
+        document.getElementById("detailView").classList.remove("hidden");
         const target = allMovies.find(m => m.id === docId);
         if (target) { renderMovieDetail(target); }
         else {
@@ -1063,13 +1180,28 @@
             else { showHomeView(); }
           });
         }
+        return;
       }
+
+      // ROUTE 3: HOME VIEW
+      currentActiveMovie = null;
+      document.title = "MANGALORE MOVIES";
+      const trailer = document.getElementById("detailTrailerFrame");
+      if (trailer) trailer.src = "";
+      document.getElementById("detailView").classList.add("hidden");
+      document.getElementById("seeAllView").classList.add("hidden");
+      document.getElementById("homeView").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     window.showHomeView = function() {
-      if (window.location.hash) { history.back(); }
-      else { handleRoute(); }
+      selectedLanguage = "All";
+      if (window.location.hash) {
+        history.pushState("", document.title, window.location.pathname + window.location.search);
+      }
+      handleRoute();
     };
+
     window.addEventListener("hashchange", handleRoute);
 
     document.getElementById("detailUnmuteBtn").addEventListener("click", function() {
