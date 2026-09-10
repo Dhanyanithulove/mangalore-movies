@@ -5,15 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MANGALORE MOVIES</title>
 
-  <!-- ================= GOOGLE SEARCH CONSOLE VERIFICATION ================= -->
-  <meta name="google-site-verification" content="google4a662408b4dc1e34" />
-
   <!-- ================= WEBSITE FAVICON & LOGO ================= -->
   <link rel="icon" type="image/png" href="https://i.ibb.co/xtdHs2Zb/1000147633-1.png">
   <link rel="shortcut icon" type="image/png" href="https://i.ibb.co/xtdHs2Zb/1000147633-1.png">
   <link rel="apple-touch-icon" href="https://i.ibb.co/xtdHs2Zb/1000147633-1.png">
 
-  <!-- Default Open Graph Tags -->
+  <!-- Default Open Graph Tags (Edge function replaces these if ?v=ID is in the link) -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="MANGALORE MOVIES">
   <meta id="metaOgTitle" property="og:title" content="MANGALORE MOVIES">
@@ -105,13 +102,10 @@
   <!-- ================= TOP NAVBAR ================= -->
   <header class="border-b border-gray-800/80 bg-[#0d101a]/95 backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center gap-3">
-      
-      <!-- Logo Home Button (Opens Home & Refreshes Automatically) -->
-      <button onclick="window.location.href = window.location.origin;" class="flex items-center gap-2.5 group focus:outline-none cursor-pointer">
+      <button onclick="showHomeView()" class="flex items-center gap-2.5 group focus:outline-none cursor-pointer">
         <img src="https://i.ibb.co/xtdHs2Zb/1000147633-1.png" alt="Logo" class="w-10 h-10 rounded-full object-cover ring-2 ring-red-600 shadow-lg group-hover:ring-red-500 transition duration-300" draggable="false"/>
         <span class="text-lg sm:text-2xl font-black tracking-wider text-white uppercase group-hover:text-red-500 transition duration-200">MANGALORE <span class="text-red-600">MOVIES</span></span>
       </button>
-
       <a id="telegramHeaderBtn" href="https://t.me/" target="_blank" class="animate-telegram flex items-center gap-2 bg-[#229ED9] hover:bg-[#1d8cc2] text-white text-xs sm:text-sm font-bold px-4 py-2 rounded-full shadow-lg shadow-[#229ED9]/30 border border-white/20 transition duration-300">
         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
         <span class="hidden xs:inline">Join</span> Telegram
@@ -369,7 +363,7 @@
         const slide = document.createElement("div");
         slide.className = "w-full h-full flex-shrink-0 relative cursor-pointer group/slide";
         slide.innerHTML = `
-          <img src="${ytThumbnail}" alt="${m.title}" draggable="false" class="w-full h-full object-cover group-hover/slide:scale-105 transition duration-700 ease-out pointer-events-none" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${m.youtubeId}/hqdefault.jpg'" />
+          <img src="${ytThumbnail}" alt="${m.title}" draggable="false" class="w-full h-full object-cover group-hover/slide:scale-105 transition duration-700 ease-out pointer-events-none" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${m.youtubeId}/mqdefault.jpg'" />
           <div class="absolute inset-0 bg-gradient-to-t from-[#07090f] via-[#07090f]/50 to-transparent pointer-events-none"></div>
           <div class="absolute inset-0 bg-gradient-to-r from-[#07090f]/80 via-transparent to-transparent pointer-events-none"></div>
           <div class="absolute top-3 inset-x-3 sm:top-5 sm:inset-x-6 flex justify-between items-center z-10 pointer-events-none"><span class="bg-red-600/90 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow">🔥 FEATURED #0${idx + 1}</span>${m.year ? `<span class="bg-black/70 backdrop-blur-md border border-white/15 text-yellow-400 text-[10px] font-bold px-2 py-0.5 rounded-md shadow">⭐ ${m.year}</span>` : ''}</div>
@@ -524,7 +518,8 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Share link creating ?v=ID#slug
+    // THE MAGIC SHARE LINK
+    // This creates the link WITH ?v=ID so WhatsApp & Edge Functions know exactly what to show
     window.shareMovieLink = async function() {
       if (!currentActiveMovie) return;
       const m = currentActiveMovie;
